@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>王者荣耀·本命溯源 </title>
+    <title>王者荣耀·本命溯源</title>
     <style>
         :root {
             /* 浅色系高级电竞配色：珍珠白、琉璃蓝、荣耀金、雅致灰 */
@@ -352,7 +352,7 @@ const rawHeroData = [
     "露娜|燃烧的剑，燃烧的心！|打野|月下无限连,孤独秀儿|你是峡谷最极致的艺术品。逆风只是拉长表演的时间，只要给你足够发育空间，后期的你能在人群中谱写月光乐章。|8,5,8,8,3,10,10,8|00101111",
     "镜|自我之象，犹在镜中！|打野|冷酷刺客,极限操作|你信奉极致操作与绝对冷静。在万军丛中取敌将首级是日常，不需要队友嘘寒问暖，只要他们分散注意力。|9,3,7,8,2,9,10,2|00110000",
     "澜|潜行于黑暗，游猎于光明。|打野|孤独刺客,绝境反杀|你习惯在暗处潜行，寻找致命破绽。单兵作战极强，表面冷酷，遇到认可的队友时愿化身守护的刀刃。|8,5,8,7,3,8,9,5|00110010",
-    "空空儿|妙手空空，踏雪无痕。|打野|灵动神偷,无法捕捉|你是峡谷中最让人头疼的飞贼。不追求正面对抗，只在边缘游离，偷取敌方的核心资源后潇洒离去。|7,3,5,8,3,10,9,4|00110101",
+    "空空儿|妙手空空，踏雪无痕。|打野|灵动神偷,无法捕捉|你是峡谷中最让人头疼的飞贼。不追求正面对对抗，只在边缘游离，偷取敌方的核心资源后潇洒离去。|7,3,5,8,3,10,9,4|00110101",
     "梦奇|胖达荣荣！|对抗路|双修胖纸,快乐肉搏|你是个无忧无虑的吉祥物。可以在法系和物理之间反复横跳，用最可爱的外表打出最凶悍的肉搏战。|7,8,7,7,4,5,5,7|00110111",
     "老夫子|天不生夫子，万古如长夜！|对抗路|单挑无敌,塔见愁|你是最无情的边路推塔机器。不苟言笑，只盯着防御塔和落单倒霉蛋。哪怕被抓，开启二技能就有胆量敲碎所有人。|7,8,5,9,8,4,5,9|00111001",
     "李信|这里是为我所统帅的战场！|对抗路|高地保安,孤独带线|你能在光明与黑暗中自由切换。要么化身最高傲的高地保安防守一切，要么化身最疯狂的偷塔狂魔拆毁一切。|8,6,6,8,3,5,6,6|00111011",
@@ -563,14 +563,51 @@ function calcResult() {
     renderResult(bestHero, scores, maxMatchPercent);
 }
 
+// 头像加载防崩盘与多格式兼容机制
+function loadHeroImage(imgElement, heroName) {
+    // 去除前后空格
+    const nameTrimmed = heroName.trim();
+    // 去除内部所有空格作为备选方案（防手滑）
+    const nameNoSpace = heroName.replace(/\s+/g, '');
+    
+    // 穷举可能的文件后缀名和容易出错的空格情况
+    const paths = [
+        `images/${nameTrimmed}.png`,
+        `images/${nameTrimmed}.PNG`,
+        `images/${nameTrimmed}.jpg`,
+        `images/${nameTrimmed}.JPG`,
+        `images/${nameTrimmed}.jpeg`,
+        `images/${nameTrimmed}.webp`,
+        `images/${nameNoSpace}.png`,
+        `images/${nameNoSpace}.jpg`
+    ];
+    
+    let idx = 0;
+    imgElement.onerror = function() {
+        idx++;
+        if (idx < paths.length) {
+            // 依次尝试后续格式
+            imgElement.src = paths[idx];
+        } else {
+            // 所有格式都找不到时，优雅隐藏画框
+            imgElement.parentElement.style.display = 'none';
+            imgElement.onerror = null; 
+        }
+    };
+    
+    // 首次尝试加载
+    imgElement.src = paths[0];
+}
+
 function renderResult(res, rawScores, percent) {
     document.getElementById('page-loading').style.display = 'none';
     document.getElementById('page-result').style.display = 'block';
 
-    // 动态挂载头像，位于 image 文件夹下，兼容 png 与 jpg，加载失败时自动隐藏父容器
+    // 动态挂载头像并启用安全加载机制
     const avatarBox = document.getElementById('avatar-box');
     avatarBox.style.display = 'block'; // 恢复显示（重测时用到）
-    avatarBox.innerHTML = `<img src="images/${res.name}.png" onerror="this.onerror=null; this.src='image/${res.name}.jpg'; this.onerror=function(){ this.parentElement.style.display='none'; };" class="hero-image" alt="${res.name}">`;
+    avatarBox.innerHTML = `<img class="hero-image" alt="${res.name}">`;
+    loadHeroImage(avatarBox.querySelector('img'), res.name);
 
     // 契合度显示
     document.getElementById('res-match-percent').innerText = `本命契合度 ${(percent).toFixed(1)}%`;
