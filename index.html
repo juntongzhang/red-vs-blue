@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>王者荣耀·本命溯源 浅色臻享版</title>
+    <style>
+        :root {
+            /* 浅色系高级电竞配色：珍珠白、琉璃蓝、荣耀金、雅致灰 */
+            --bg-base: #f4f6fa;
+            --bg-texture: radial-gradient(circle at 50% -20%, #e0e8f5 0%, #f4f6fa 60%);
+            
+            --card-glass: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(255, 255, 255, 1);
+            --card-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+            
+            --text-title: #0f172a;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            
+            --accent-blue: #0ea5e9;
+            --accent-blue-light: #e0f2fe;
+            --accent-gold: #d97706;
+            --accent-gold-light: #fef3c7;
+            
+            --font-stack: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+            --radius-xl: 28px;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: var(--font-stack);
+            background: var(--bg-texture);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            min-height: 100vh;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* ----- 封面页 ----- */
+        #page-intro {
+            padding: 50px 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; text-align: center;
+        }
+
+        .intro-title {
+            font-size: 42px; font-weight: 900; margin-bottom: 20px;
+            color: var(--text-title); letter-spacing: 2px; line-height: 1.3;
+        }
+        .intro-sub {
+            font-size: 16px; color: var(--text-muted); line-height: 1.8;
+            margin-bottom: 50px; font-weight: 500; letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--text-title), #334155);
+            color: #fff; border: none; border-radius: 35px;
+            padding: 18px 55px; font-size: 18px; font-weight: 700; letter-spacing: 3px;
+            cursor: pointer; transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(30, 41, 59, 0.25);
+        }
+        .btn-primary:active { transform: scale(0.96); box-shadow: 0 4px 10px rgba(30, 41, 59, 0.2); }
+
+        /* ----- 测试页 ----- */
+        #page-test { display: none; flex-direction: column; padding: 40px 26px; min-height: 100vh; }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .dim-indicator { font-size: 14px; color: var(--accent-blue); font-weight: 800; letter-spacing: 1.5px; }
+        .q-counter { font-size: 15px; color: var(--text-muted); font-weight: 600; }
+
+        .progress-track { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 45px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-blue), #38bdf8); width: 0%; transition: width 0.5s ease; border-radius: 4px;}
+
+        .q-content { flex: 1; display: flex; flex-direction: column; }
+        .q-text { font-size: 22px; line-height: 1.7; font-weight: 700; color: var(--text-title); margin-bottom: 40px; }
+
+        .options-list { display: flex; flex-direction: column; gap: 16px; }
+        .opt-btn {
+            background: var(--card-glass); backdrop-filter: blur(10px); 
+            border: 1px solid var(--card-border); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+            padding: 22px; border-radius: var(--radius-lg); font-size: 17px; color: var(--text-main); font-weight: 600;
+            cursor: pointer; transition: var(--transition); display: flex; align-items: center;
+        }
+        .opt-btn:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08); border-color: var(--accent-blue-light); }
+        .opt-btn:active { transform: scale(0.98); }
+        .opt-letter { 
+            color: var(--accent-blue); background: var(--accent-blue-light); 
+            min-width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; margin-right: 18px; font-weight: 800; font-size: 16px;
+        }
+
+        .btn-back {
+            margin-top: auto; padding-top: 35px; align-self: center;
+            background: none; border: none; color: var(--text-muted);
+            font-size: 15px; cursor: pointer; transition: color 0.3s; font-weight: 600;
+        }
+        .btn-back:hover { color: var(--text-title); }
+
+        /* ----- 结果页 (大幅优化排版与字号) ----- */
+        #page-result { display: none; min-height: 100vh; padding: 40px 22px 70px; }
+
+        /* 英雄名片与头像 */
+        .hero-id-card {
+            background: #fff; border-radius: var(--radius-xl);
+            padding: 40px 25px 35px; margin-bottom: 25px;
+            box-shadow: var(--card-shadow); border: 1px solid rgba(255,255,255,0.8);
+            position: relative; text-align: center;
+        }
+        
+        .hero-image-box {
+            width: 200px; height: 200px;
+            margin: 25px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(14, 165, 233, 0.15);
+            border: 4px solid #fff;
+            background: #f8fafc;
+        }
+        .hero-image {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .match-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+            color: #fff; padding: 8px 20px; border-radius: 30px; font-weight: 800;
+            font-size: 16px; margin-bottom: 18px; letter-spacing: 1px;
+            box-shadow: 0 6px 15px rgba(217, 119, 6, 0.3);
+        }
+
+        .res-role-badge {
+            display: inline-block; font-size: 14px; color: var(--accent-blue); background: var(--accent-blue-light);
+            padding: 6px 16px; border-radius: 20px; font-weight: 800; letter-spacing: 1px; margin-bottom: 15px;
+        }
+        .res-name { font-size: 48px; font-weight: 900; color: var(--text-title); letter-spacing: 1px; margin-bottom: 12px; }
+        .res-slogan { font-size: 17px; color: var(--text-muted); font-style: italic; font-weight: 500; }
+
+        /* 通用卡片样式 */
+        .card {
+            background: var(--card-glass); backdrop-filter: blur(12px); border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl); padding: 30px; margin-bottom: 25px; box-shadow: var(--card-shadow);
+        }
+        .card-header {
+            font-size: 19px; color: var(--text-title); font-weight: 800; letter-spacing: 2px;
+            margin-bottom: 25px; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .card-header::after {
+            content:''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 35px; height: 4px; background: var(--accent-blue); border-radius: 2px;
+        }
+
+        /* ----- 雷达图放大 ----- */
+        .radar-wrapper { display: flex; justify-content: center; margin: 15px 0; width: 100%; }
+        /* 画布稍微放大，匹配更清晰的阅读体验 */
+        canvas { max-width: 100%; width: 340px; height: 310px;}
+
+        /* ----- 全新图谱：潜意识双极剖析 ----- */
+        .spectrum-container { display: flex; flex-direction: column; gap: 24px; padding-top: 15px; }
+        .spectrum-row { display: flex; flex-direction: column; gap: 10px; }
+        .spectrum-labels { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-muted); font-weight: 700; }
+        .spectrum-labels .active-left { color: var(--accent-blue); }
+        .spectrum-labels .active-right { color: var(--accent-gold); }
+        
+        .spectrum-track { 
+            width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; position: relative; 
+            background-image: linear-gradient(90deg, rgba(14, 165, 233, 0.15) 0%, transparent 50%, rgba(217, 119, 6, 0.15) 100%);
+        }
+        .spectrum-marker {
+            position: absolute; top: 50%; transform: translate(-50%, -50%);
+            width: 18px; height: 18px; border-radius: 50%;
+            background: #fff; border: 4px solid var(--text-title);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+            transition: left 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* ----- 判词与标签 ----- */
+        .res-desc { font-size: 17px; line-height: 1.9; color: var(--text-title); text-align: justify; margin-bottom: 25px; padding: 15px 18px; background: #f8fafc; border-radius: var(--radius-md); font-weight: 500;}
+        .tags-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .hero-tag { font-size: 14px; color: var(--accent-gold); background: var(--accent-gold-light); padding: 6px 15px; border-radius: 20px; font-weight: 700; }
+
+        /* Loading */
+        #page-loading { display: none; height: 100vh; flex-direction: column; justify-content: center; align-items: center; }
+        .spinner { width: 55px; height: 55px; border: 4px solid #e2e8f0; border-top-color: var(--accent-blue); border-radius: 50%; animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div id="page-intro" class="container">
+    <h1 class="intro-title">王者荣耀<br><span style="font-size:30px; display:block; margin-top:12px; color:var(--accent-blue);">本命英雄测试</span></h1>
+    <p class="intro-sub">
+        八大维度深度拆解 × 256种潜意识星图<br>
+        KNN最邻近算法精准计算契合度<br>
+        寻找峡谷中那个最真实的你
+    </p>
+    <button class="btn-primary" onclick="startTest()">推演天命</button>
+</div>
+
+<div id="page-test" class="container">
+    <div class="top-bar">
+        <span class="dim-indicator" id="dim-text">DIMENSION 01</span>
+        <span class="q-counter" id="q-counter">1 / 24</span>
+    </div>
+    <div class="progress-track">
+        <div class="progress-fill" id="progress-bar"></div>
+    </div>
+
+    <div class="q-content" id="q-box">
+        <div class="q-text" id="q-text">加载中...</div>
+        <div class="options-list" id="opt-list"></div>
+    </div>
+
+    <button class="btn-back" id="btn-back" onclick="prevQ()">撤回上一步</button>
+</div>
+
+<div id="page-loading" class="container">
+    <div class="spinner"></div>
+    <p style="margin-top:28px; color:var(--text-muted); font-size: 15px; font-weight:600; letter-spacing: 2px;">正在进行KNN潜意识距离匹配...</p>
+</div>
+
+<div id="page-result" class="container">
+    <!-- 英雄名片与头像挂载点 -->
+    <div class="hero-id-card fade-in" style="animation-delay: 0.1s;">
+        <div class="match-badge" id="res-match-percent">本命契合度 98.5%</div>
+        <br>
+        <div class="res-role-badge" id="res-role">对抗路</div>
+        <h2 class="res-name" id="res-name">英雄名</h2>
+        
+        <!-- 新增 1:1 图片画框 -->
+        <div class="hero-image-box" id="avatar-box">
+            <!-- 头像图片在此动态生成 -->
+        </div>
+
+        <div class="res-slogan" id="res-slogan">"台词"</div>
+    </div>
+
+    <!-- 1. 八维雷达图 (全面放大) -->
+    <div class="card fade-in" style="animation-delay: 0.2s;">
+        <div class="card-header">本命八维战力图</div>
+        <div class="radar-wrapper">
+            <canvas id="radarChart" width="360" height="320"></canvas>
+        </div>
+    </div>
+
+    <!-- 2. 全新双极图谱：潜意识剖析 -->
+    <div class="card fade-in" style="animation-delay: 0.3s;">
+        <div class="card-header">潜意识双极剖析</div>
+        <div class="spectrum-container" id="trait-bars"></div>
+    </div>
+
+    <!-- 3. 英雄判词 -->
+    <div class="card fade-in" style="animation-delay: 0.4s;">
+        <div class="card-header">英雄判词</div>
+        <div class="tags-container" id="res-tags"></div>
+        <div class="res-desc" id="res-desc">描述内容</div>
+        
+        <button class="btn-primary" style="width:100%; margin-top:20px; padding:20px; font-size: 18px;" onclick="location.reload()">重新推演</button>
+    </div>
+</div>
+
+<script>
+/**
+ * 8大维度 (24题) - 覆盖256种潜意识组合
+ * D0: 孤狼单带(0) vs 团队抱团(1)
+ * D1: 极限微操(0) vs 稳健意识(1)
+ * D2: 激进入侵(0) vs 稳健发育(1)
+ * D3: 先手开团(0) vs 后手反打(1)
+ * D4: 理智上分(0) vs 快乐游戏(1)
+ * D5: 前期压制(0) vs 后期大核(1)
+ * D6: 近身肉搏(0) vs 远程消耗(1)
+ * D7: 瞬间爆发(0) vs 持续折磨(1) 【全新第八维度】
+ */
+
+const questions = [
+    // D0 (团队)
+    { text: "面对敌方残血英雄逃亡，你更倾向于：", dim: 0, opts: [{ t: "闪现越塔也要自己拿人头建立优势", v: 0 }, { t: "试探性追击，不行就撤回去清野/带线", v: 0.33 }, { t: "尽量把人头让给己方最需要经济的核心位", v: 0.67 }, { t: "帮队友卡住敌方支援位置，掩护队友收割", v: 1 }]},
+    { text: "顺风局扩大优势时，你的主要游戏思路是：", dim: 0, opts: [{ t: "一个人住对面野区，来一个杀一个", v: 0 }, { t: "单带最远的一路，靠个人实力牵制多人", v: 0.33 }, { t: "积极呼叫打野和辅助一起控龙拔塔", v: 0.67 }, { t: "五人紧密抱团，保护核心稳稳推进高地", v: 1 }]},
+    { text: "如果你的队友在野区被敌方多人埋伏抓包：", dim: 0, opts: [{ t: "果断卖掉，绝不去送，趁机去吃他的线", v: 0 }, { t: "在边缘OB游走，寻找机会收割对面的残血", v: 0.33 }, { t: "赶紧发信号让其他队友一起包抄反打", v: 0.67 }, { t: "想都不想直接交控制/保命技能冲过去救人", v: 1 }]},
+    // D1 (操作)
+    { text: "在对局中，最让你感到多巴胺飙升的瞬间是：", dim: 1, opts: [{ t: "丝血一打三完成极限反杀，秀翻全场", v: 0 }, { t: "打出一套完美的连招，瞬间蒸发敌方C位", v: 0.33 }, { t: "提前预判对面的走位和支援路线，反蹲成功", v: 0.67 }, { t: "兵不血刃，通过完美的兵线运营推平敌方基地", v: 1 }]},
+    { text: "你认为自己在王者荣耀中最突出的个人能力是：", dim: 1, opts: [{ t: "极快的手速与肌肉记忆反应", v: 0 }, { t: "对本命英雄连招和斩杀线的极致掌握", v: 0.33 }, { t: "频繁切屏看小地图，对全局视野的阅读", v: 0.67 }, { t: "整体局势的指挥规划与阵容优劣势分析", v: 1 }]},
+    { text: "如果在对线期被对面单杀，你的第一反应通常是：", dim: 1, opts: [{ t: "“刚才那个闪现交慢了/技能空了，纯属失误”", v: 0 }, { t: "“这英雄机制太克制我了，没办法”", v: 0.33 }, { t: "“对面中野肯定在这附近蹲了很久，我大意了”", v: 0.67 }, { t: "立刻查看兵线状态，计算自己这波损失了多少经济", v: 1 }]},
+    // D2 (节奏)
+    { text: "在平稳的对线期，你的核心诉求是：", dim: 2, opts: [{ t: "从1级开始就疯狂换血，一直寻找单杀机会", v: 0 }, { t: "抢线压制，把对面压出经验区让他吃不到钱", v: 0.33 }, { t: "把兵线控在自家塔前，保证自己绝对安全发育", v: 0.67 }, { t: "只要一塔不掉，我就可以一直苟在后面稳稳补刀", v: 1 }]},
+    { text: "游戏刚开局的第一分钟，你通常的动向是：", dim: 2, opts: [{ t: "直接叫人去对面野区反野搞事，不死不休", v: 0 }, { t: "在河道草丛蹲伏，看能不能出其不意拿一血", v: 0.33 }, { t: "帮队友抢完线或探一下敌方打野视野就撤退", v: 0.67 }, { t: "安稳待在自家塔下或野区，绝不越过河道一半", v: 1 }]},
+    { text: "看到敌方三名残血英雄狼狈逃进自家二塔下：", dim: 2, opts: [{ t: "直接抗塔强冲！只要能换掉对面的大C就血赚", v: 0 }, { t: "找刁钻的角度尝试用远程技能收割，不深追", v: 0.33 }, { t: "把兵线带进塔，利用兵线逼迫他们回家补状态", v: 0.67 }, { t: "果断转身，趁机去把无人防守的暴君或主宰控下", v: 1 }]},
+    // D3 (决策)
+    { text: "大型团战爆发前夕，你最习惯的站位是：", dim: 3, opts: [{ t: "绕开正面，藏在敌方侧后方的阴影里随时准备切入", v: 0 }, { t: "顶在队伍最前面，肉身排视野，寻找强开团的时机", v: 0.33 }, { t: "站在队伍侧翼，用手长的优势不断提供消耗或控制", v: 0.67 }, { t: "紧紧贴在己方射手/法师身边，寸步不离提供绝对保护", v: 1 }]},
+    { text: "面对敌方死守、久攻不下的高地塔，你会怎么做：", dim: 3, opts: [{ t: "找准对面走位失误，直接闪现进塔强行开团", v: 0 }, { t: "走位靠前，尝试肉身骗出对面的关键大招或控制", v: 0.33 }, { t: "利用手长技能慢慢消耗敌方血量和防御塔血量", v: 0.67 }, { t: "后撤让出视野，去控龙或清空敌方野区，等对面出来", v: 1 }]},
+    { text: "当敌方凶悍的刺客突然突进到你们阵型中央时：", dim: 3, opts: [{ t: "“我不管自家后排，我也去切对面的后排互换！”", v: 0 }, { t: "立刻将所有爆发伤害和控制技能砸在他身上尝试秒杀", v: 0.33 }, { t: "赶紧给队友套盾/加血/加速，边退边打进行拉扯", v: 0.67 }, { t: "我早就留好了保命或反打技能，等他冲进来就让他有来无回", v: 1 }]},
+    // D4 (心态)
+    { text: "遭遇严重连败、段位疯狂掉星时，你会：", dim: 4, opts: [{ t: "换上胜率最高的绝活英雄，关闭局内文字默默上分", v: 0 }, { t: "保存录像，认真复盘分析上几把到底输在哪里", v: 0.33 }, { t: "换个不常玩的分路打打，换换心情调整状态", v: 0.67 }, { t: "彻底放弃排位，叫上朋友去打匹配或大乱斗快乐一下", v: 1 }]},
+    { text: "对局中遇到队友之间互相发文字推卸责任、对喷：", dim: 4, opts: [{ t: "全体屏蔽，不受影响，认真打好自己该做的", v: 0 }, { t: "发快捷消息“稳住，我们能赢”尝试安抚大家情绪", v: 0.33 }, { t: "在旁边默默吃瓜看戏，偶尔发个表情包", v: 0.67 }, { t: "“谁骂我兄弟我就帮谁对线”，键盘敲得直冒火", v: 1 }]},
+    { text: "在你内心深处，玩王者荣耀最重要的价值在于：", dim: 4, opts: [{ t: "赢下比赛，拿到金牌，冲上更高的段位证明实力", v: 0 }, { t: "每局的数据必须好看，KDA要高，最好拿MVP", v: 0.33 }, { t: "英雄玩得足够飘逸帅气，皮肤手感和特效要顶满", v: 0.67 }, { t: "输赢无所谓，和好朋友连麦开黑笑出猪叫才是真谛", v: 1 }]},
+    // D5 (发力)
+    { text: "你个人最喜欢、最擅长把握哪个时间段的对局节奏：", dim: 5, opts: [{ t: "1级到4级的野区保卫战，见面就是干，定调局势", v: 0 }, { t: "出完第一件核心装备后的中期小规模野区遭遇团", v: 0.33 }, { t: "推掉敌方所有外塔后，压制高地时的三路兵线牵扯", v: 0.67 }, { t: "20分钟后，全员六神装争夺风暴龙王的一波大决战", v: 1 }]},
+    { text: "三路外塔全破的极度逆风局，你的心态通常是：", dim: 5, opts: [{ t: "经济差距太大，毫无体验，赶紧点降打下一把", v: 0 }, { t: "不想慢性死亡，找机会出去单抓，试图打断对面节奏", v: 0.33 }, { t: "高地保安就位，拼命清线，这高地塔谁也别想轻易推", v: 0.67 }, { t: "只要水晶不爆就绝不放弃，拖到大家六神装绝对能翻盘", v: 1 }]},
+    { text: "如果上天允许你选择一个自带的永久对局Buff：", dim: 5, opts: [{ t: "出门自带2000初始经济，从零秒开始滚雪球压制", v: 0 }, { t: "对暴君和主宰的伤害翻倍，永远掌控中期的远古生物", v: 0.33 }, { t: "复活甲和名刀的使用次数无上限，拥有无限的容错率", v: 0.67 }, { t: "达到满级时额外开启一个装备栏，拥有大后期的终极战力", v: 1 }]},
+    // D6 (距离)
+    { text: "在团战中，你觉得最舒服的输出位置是：", dim: 6, opts: [{ t: "直接切入敌方阵型中心，刀刀到肉", v: 0 }, { t: "在人群边缘穿梭游走，找机会进场", v: 0.33 }, { t: "站在队伍大后方，利用技能疯狂消耗", v: 0.67 }, { t: "躲在视野盲区狙击，决不让敌人摸到我", v: 1 }]},
+    { text: "如果遇到落单的脆皮，你的第一反应是：", dim: 6, opts: [{ t: "闪现贴脸，一套连招直接带走", v: 0 }, { t: "利用位移快速拉近距离，平A追击", v: 0.33 }, { t: "保持安全距离，用减速和消耗慢慢折磨", v: 0.67 }, { t: "远距离丢一套技能就跑，绝不给他反打机会", v: 1 }]},
+    { text: "你在选择英雄时，最看重哪种攻击手感：", dim: 6, opts: [{ t: "拳拳到肉的近战打击感与拼刀快感", v: 0 }, { t: "灵活穿插、中近距离的拉扯感", v: 0.33 }, { t: "满屏特效、大范围覆盖的法术轰炸感", v: 0.67 }, { t: "箭无虚发、千里之外取敌首级的精准感", v: 1 }]},
+    // D7 (爆发 vs 持续) [新增]
+    { text: "团战中你的输出节奏倾向于：", dim: 7, opts: [{ t: "找准时机进场，一套技能全部砸完就立刻撤退", v: 0 }, { t: "利用短CD技能频繁切入和退出，寻找多次斩杀机会", v: 0.33 }, { t: "保持安全距离，持续不断地提供范围火力压制", v: 0.67 }, { t: "只要我不死，就能一直粘着敌人进行无休止的输出", v: 1 }]},
+    { text: "面对敌方出了多件防御装的肉坦，你会：", dim: 7, opts: [{ t: "懒得多看他一眼，直接绕过去强切对面的脆皮后排", v: 0 }, { t: "配合队友先集中一波高爆发火力尝试将其秒杀", v: 0.33 }, { t: "利用技能机制和真实伤害，耐心地慢慢将其血条磨平", v: 0.67 }, { t: "出好穿透和吸血装，享受和他持续硬刚站撸的快感", v: 1 }]},
+    { text: "你最享受的击杀方式是：", dim: 7, opts: [{ t: "血条瞬间消失术，敌人根本连按闪现的反应时间都没有", v: 0 }, { t: "丝血极限反杀时，那一瞬间打出的恐怖爆发", v: 0.33 }, { t: "一点点压低对面的血线，最后用一个优雅的技能收割", v: 0.67 }, { t: "让敌人在无尽的拉扯、减速和中毒/灼烧中绝望倒下", v: 1 }]}
+];
+
+// 130位常驻英雄库（补充了第八维度的数据：Stats末尾补充1个能力值，Binary末尾补充0或1）
+// 格式：英雄名|台词|分路|标签|描述|雷达8维|8位理想二进制
+const rawHeroData = [
+    "影|我，即是黑夜。|打野|极致潜行,一击必杀|你是绝对的刺杀机器。没有多余的废话和动作，在阴影中蛰伏，只为那瞬间的致命一击。|9,2,4,6,3,9,8,2|00000000",
+    "兰陵王|刀锋所划之地，便是疆土。|打野|隐身刺客,冷酷无情|你是黑暗中让人窒息的死神。最懂得在前期利用信息差建立恐慌。简单的连招足以摧毁敌方心态。|9,2,4,6,6,6,5,2|00000010",
+    "裴擒虎|全军出击！|打野|双形态,前期入侵|你是一头极具侵略性的猛虎。绝不拖泥带水，从一级开始就疯狂入侵敌方野区，在前期就将比赛终结。|8,4,6,8,2,7,7,6|00000101",
+    "橘右京|修罗，是我的剑！|打野|极致拉扯,反打之王|你拥有刺客的爆发和战士的拉扯。在逆风时如修罗般冷静，利用燕返和居合寻找最致命的破绽一刀定音。|8,5,7,6,5,7,7,4|00000110",
+    "暃|踏玉飞檐，不拘一格！|打野|飞檐走壁,快乐斩杀|你讨厌被峡谷的墙壁束缚。可以为了开心而战，在墙体上穿梭寻找残血，用最华丽的下击完成收割。|8,4,6,7,4,8,8,3|00001000",
+    "云中君|世间公道，唯有手中之刃！|打野|无视地形,展翅翱翔|你是一只渴望自由的孤鸟。无视峡谷的所有墙壁，用最刁钻的角度俯冲敌阵，啄瞎敌人的双眼。|8,4,6,7,3,9,6,3|00001010",
+    "宫本武藏|天下无双！|打野|极致锁定,剑气纵横|你是个孤独的求败者。眼里只有敌方的核心C位，只要大招锁定，天涯海角也要将其斩于刀下。|8,5,6,7,5,7,8,4|00001100",
+    "姬小满|武道，亦是生活！|对抗路|花式连招,灵活格斗|你是个不拘一格的格斗天才。招式千变万化，能在战场上用眼花缭乱的组合拳将敌人一套带走。|8,6,7,6,6,8,9,5|00001110",
+    "狂铁|越是恐惧，越要战胜它！|对抗路|充能战神,前期高压|你享受前期将对手压在塔下摩擦的快感。简单粗暴，不拘小节，享受混战中砸出巨额护盾的安心感。|8,8,7,6,6,4,4,6|00010001",
+    "元歌|人生如戏，全靠演技！|对抗路|提线木偶,机制碾压|你是玩弄人性的傀儡师。本体脆弱无比，却能躲在安全距离外用极致的操作戏耍那些试图靠近你的莽夫。|9,2,6,8,7,8,10,2|00011010",
+    "花木兰|谁说女子不如男！|对抗路|重剑无锋,完美战士|你是完美主义的战士。既有轻剑灵动又有重剑霸体。对时机把握苛刻，一旦出手就是雷霆沉默。|8,6,8,6,6,7,9,4|00011100",
+    "亚连|我叫亚连，是个保镖。|对抗路|混伤战神,无法选中|你性格温和但打起架来却像狗皮膏药一样黏人。靠着多段位移和无敌大招在人群中稳定输出。|8,8,8,6,4,7,6,8|00100001",
+    "达摩|阿弥陀佛，贫僧这就超度你！|对抗路|一脚定音,草丛刺客|你是一个在绝境中寻找光芒的苦行僧。极度隐忍，只为了团战最关键那一秒，闪现一脚完成逆转。|8,6,8,6,8,6,8,2|00100010",
+    "曹操|宁教我负天下人！|对抗路|吸血战神,枭雄本色|你是不讲道理的乱战之王。顺风一往无前，逆风凭借大招恐怖吸血屹立不倒，是从不向命运低头的狂战。|8,7,6,7,4,6,5,8|00100101",
+    "孙策|乘风破浪！|对抗路|开船支援,全图控制|你是峡谷中最阳光的航海家。只要队友一打架，你就会立刻开着大船撞向敌阵，带来最狂野的控制。|7,8,8,6,8,7,6,5|00100110",
+    "哪吒|我可是突破常理的存在！|对抗路|千里送人头,锁定切后|你有一颗永不服输的热血心脏。只要锁定目标，哪怕飞越千山万水，哪怕最终是一换一，你也绝不回头。|7,7,7,6,4,9,4,7|00101001",
+    "韩信|到达胜利之前，无法回头。|打野|分奴带线,无情推塔|你是绝对的节奏大师和无情分奴。深知这是个推塔游戏，极致机动掠夺资源。绝境中靠一己之力偷家翻盘。|7,3,5,10,3,10,8,4|00101010",
+    "李白|大河之剑天上来！|打野|潇洒刺客,十步一杀|你追求刀尖起舞的艺术感。顺风无处不在，对操作极度自信，把对局当成个人秀场的浪漫主义杀手。|8,4,6,8,3,9,9,2|00101100",
+    "露娜|燃烧的剑，燃烧的心！|打野|月下无限连,孤独秀儿|你是峡谷最极致的艺术品。逆风只是拉长表演的时间，只要给你足够发育空间，后期的你能在人群中谱写月光乐章。|8,5,8,8,3,10,10,8|00101111",
+    "镜|自我之象，犹在镜中！|打野|冷酷刺客,极限操作|你信奉极致操作与绝对冷静。在万军丛中取敌将首级是日常，不需要队友嘘寒问暖，只要他们分散注意力。|9,3,7,8,2,9,10,2|00110000",
+    "澜|潜行于黑暗，游猎于光明。|打野|孤独刺客,绝境反杀|你习惯在暗处潜行，寻找致命破绽。单兵作战极强，表面冷酷，遇到认可的队友时愿化身守护的刀刃。|8,5,8,7,3,8,9,5|00110010",
+    "空空儿|妙手空空，踏雪无痕。|打野|灵动神偷,无法捕捉|你是峡谷中最让人头疼的飞贼。不追求正面对抗，只在边缘游离，偷取敌方的核心资源后潇洒离去。|7,3,5,8,3,10,9,4|00110101",
+    "梦奇|胖达荣荣！|对抗路|双修胖纸,快乐肉搏|你是个无忧无虑的吉祥物。可以在法系和物理之间反复横跳，用最可爱的外表打出最凶悍的肉搏战。|7,8,7,7,4,5,5,7|00110111",
+    "老夫子|天不生夫子，万古如长夜！|对抗路|单挑无敌,塔见愁|你是最无情的边路推塔机器。不苟言笑，只盯着防御塔和落单倒霉蛋。哪怕被抓，开启二技能就有胆量敲碎所有人。|7,8,5,9,8,4,5,9|00111001",
+    "李信|这里是为我所统帅的战场！|对抗路|高地保安,孤独带线|你能在光明与黑暗中自由切换。要么化身最高傲的高地保安防守一切，要么化身最疯狂的偷塔狂魔拆毁一切。|8,6,6,8,3,5,6,6|00111011",
+    "马超|电贯金石，一往无前！|对抗路|插秧王,极致拉扯|天下武功唯快不破。你是风筝与拉扯的宗师，永远在战场边缘游移，退一步是为了更致命的突刺。|8,5,8,8,2,9,9,7|00111101",
+    "芈月|征服了男人，也就征服了世界！|对抗路|线霸,无尽牵制|你沉醉于单带和压榨敌方资源的快感。不需要大团战，只要在线上将敌人折磨到崩溃，就能瓦解防线。|8,7,4,8,3,5,7,9|00111111",
+    "司马懿|跑吧，虫子！|打野|死神降临,压制力|你是不讲道理的死神。厌恶拉扯，喜欢用简单粗暴的沉默突进粉碎反抗，被你锁定逃到天涯海角也会被深渊吞没。|9,4,7,6,4,8,7,1|01000000",
+    "赵怀真|清风拂山岗。|对抗路|太极借力,反伤克制|你深谙太极四两拨千斤的道理。任凭敌人狂风暴雨，你自岿然不动，随后将伤害尽数奉还。|7,8,8,6,6,4,6,6|01000011",
+    "云缨|掠火神枪！|打野|枪出如龙,连招多样|你是个热血且话痨的将门虎女。招式多变，喜欢在战场上用花里胡哨的连招打得对面头晕转向。|7,6,7,7,6,7,8,6|01000101",
+    "阿轲|不是你记忆中的阿轲！|打野|背后暴击,残血刷新|你是真正的背刺女王。绝对不打先手，像幽灵一样在边缘游荡，直到看见残血才会现身，一波刷新拿五杀。|9,2,5,7,2,8,7,1|01000110",
+    "娜可露露|玛玛哈哈！|打野|毁天灭地,简单粗暴|你是个带着老鹰的无情杀手。不搞花里胡哨的操作，看准时机一套扑击，用最纯粹的爆发伤害碾碎敌方脆皮。|9,3,6,8,2,8,4,1|01001000",
+    "百里玄策|全军出击！|打野|钩镰死神,疯狂收割|你是个一旦跑起来就停不下来的疯子。只要钩镰命中，并在人群中拿到哪怕一个助攻，你就会化身收割全场的死神。|8,4,7,7,6,8,9,6|01001011",
+    "盘古|神说，要有光！|打野|缴械克星,稳健蓝领|你是个踏实可靠的工具人。不需要拿最多经济，却能在团战中精准缴械对面的普攻核心，掐死翻盘希望。|6,7,8,6,8,4,4,5|01001101",
+    "典韦|身体里沉睡的野兽，觉醒了！|打野|真伤疯狗,简单粗暴|你没有任何花里胡哨，只有纯粹愤怒真伤。只要摸到人就是乱砍。你的快乐建立在刀刀见血的疯狂站撸之上。|10,6,5,8,3,5,2,8|01001111",
+    "铠|以绝望挥剑，着逝者为铠！|打野|西北砍王,纯粹粗暴|你是一个化繁为简的实战派。开大招，冲进去，锁定C位，两刀带走，这就是你最简单纯粹的游戏哲学。|8,6,6,7,3,4,4,3|01010000",
+    "猪八戒|饱吃一顿！|对抗路|灰血不死,弹力肉盾|你是峡谷最调皮的肉盾。只要有兵线和野怪，你的血条就像是在变魔术，怎么打都不死，恶心死对面。|5,10,8,6,8,5,6,8|01010011",
+    "程咬金|一个字：干！|对抗路|灰血不死,肉身抗塔|你是峡谷最快乐的猛男。残血跳舞是日常，享受“你看我不爽又打不死我”的无赖感。用肉身骗技能恶心对面。|5,10,5,8,2,6,3,8|01010101",
+    "白起|身在黑暗，心向光明！|对抗路|嘲讽机器,电风扇|你是一个极其执着的战争机器。在后期，你那长达2.5秒的致命嘲讽是所有脆皮永远的噩梦。|4,10,9,6,9,3,4,7|01010111",
+    "廉颇|吾未老，尚能战！|对抗路|开团机器,霸体免伤|你信奉生命不止战斗不息。全身上下都是控制和霸体，享受在人群中七进七出依然屹立不倒的豪迈。|4,9,9,5,9,5,5,6|01011001",
+    "项羽|天不容我，我必逆天！|对抗路|推土机,残血狂暴|你是个不屈的霸王。哪怕血条见底也绝不倒下，反而能爆发出最强伤害，一发绝命大招经常能劈出五杀的奇迹。|6,9,9,5,7,4,4,4|01011010",
+    "夏侯惇|独眼，是男人的浪漫！|对抗路|完美坦克,全能战士|你是官方公认的最完美英雄。有肉有控制有位移有真伤，不管阵容怎么选，拿你出来永远是最稳妥和让人安心的决定。|6,9,8,6,7,5,5,6|01011101",
+    "钟无艳|给你的麻烦开个价吧！|对抗路|石化大锤,简单暴力|你是个脾气暴躁的女汉子。没有什么是一锤子解决不了的，一闪进场转大招，那毁天灭地的伤害让所有刺客都叫娘。|8,7,8,6,7,4,4,3|01011110",
+    "蚩奼|狂野战意，不灭魔躯！|对抗路|狂战魔神,越战越勇|你骨子里流淌着好战的血液。在绝境中不仅不退缩，反而能爆发出毁灭性的力量，越残血越疯狂。|9,7,6,7,4,5,7,7|01100001",
+    "大禹|治水息壤，定鼎九州！|对抗路|地形改变,阵地战神|你擅长重塑战场的规则。不靠盲目冲锋，而是用智慧改变地形，让敌人在你的领域中寸步难行。|6,8,9,6,8,3,6,7|01100011",
+    "关羽|血战到底！|对抗路|绕后神兵,一刀劈散|你是创造奇迹的神兵天降。别人在正面僵持你永远在绕后的路上。拥有极强大局观耐性，寻找一刀劈散阵型的完美角度。|7,6,9,6,6,10,8,4|01100100",
+    "孙悟空|俺老孙来也！|打野|暴力美学,简单快乐|你信奉“一力降十会”，没有什么是一棍子解决不了的。敲碎敌方C位是你的最大乐趣，操作中带着狂野。|9,4,6,8,3,7,6,2|01100110",
+    "刘备|出来混，最重要的是讲义气！|打野|贴脸喷子,免控战神|你是个讲究江湖规矩的大哥。只有把枪管塞进敌人嘴里开火才有安全感，大招一开谁也不爱，硬刚到底。|8,7,6,8,3,5,5,6|01101001",
+    "阿古朵|出击，球球！|打野|召唤流,放生野怪|你是最不喜欢打打杀杀的打野。把野怪当朋友，带着一大群召唤物去推塔，快乐就是你的终极奥义。|4,7,8,7,6,6,5,8|01101011",
+    "赵云|阁下的首级，我收下了！|打野|七进七出,最稳蓝领|你是团队最信任的万金油。冷静找到敌方C位，精准大招击飞奠定胜局。你不贪功，却总是队伍的定海神针。|7,8,8,7,7,7,6,5|01101101",
+    "杨戬|尽情放马过来吧！|对抗路|丝血反杀,放狗咬人|你有着极强的好胜心。总喜欢在丝血的极限状态下，利用大招的吸血和一技能的斩杀完成反败为胜的逆转。|8,6,7,7,5,6,7,5|01101111",
+    "雅典娜|信仰的传承，永不磨灭！|打野|献祭流,无限冲锋|你是一名高傲且执着的战神。甚至在死亡后也能化身真身继续照亮视野，永远在冲锋的路上，将生死置之度外。|8,5,6,7,4,8,8,6|01110001",
+    "嫦娥|到这儿来。|中单|法坦入侵,蓝量即血量|你外表柔弱，实则是野区最霸道的入侵者。靠着精准的计算和厚实的蓝条，前期就能以一敌多碾碎节奏。|7,8,7,7,5,4,5,7|01110011",
+    "貂蝉|华丽又漂亮地生存到最后！|中单|一打五,极限贪婪|你是极度自信的舞者。习惯在刀尖上跳舞，用无敌帧躲避致命伤害疯狂输出吸血。你的眼里没有撤退，只有秀起来。|8,4,9,7,3,9,9,9|01110101",
+    "不知火舞|放马过来吧！|中单|法刺巅峰,瞬间蒸发|你是隐藏在阴影中的烈焰。反感安稳推线，热衷游走刺杀。一扇子定音一套连招毁天灭地，是敌方后排的梦魇。|9,3,8,5,6,9,9,2|01110110",
+    "司空震|以雷霆击碎黑暗！|对抗路|雷电法王,狂暴进场|你是执掌天雷的霸主。平时沉稳，一旦开启大招便如天神下凡，用满屏的雷电将所有敌人轰杀成渣。|9,5,8,8,3,5,6,8|01111001",
+    "高渐离|该我上场表演了！|中单|团战核弹,破釜沉舟|你是点燃全场的重金属摇滚。不在乎拉扯只等待进场开大瞬间，信奉玉石俱焚，用极限AOE享受屏幕清空的狂热。|9,5,9,6,2,4,4,3|01111010",
+    "刘邦|不客观的说，我是个好人。|对抗路|全图保人,四一分推|你深谙乱世生存之道。平时在边路带线猥琐发育，一旦大哥有难，你会立刻大招降临提供最坚实的护盾。|4,9,8,6,6,6,4,7|01111101",
+    "亚瑟|王者背负，王者审判！|对抗路|万金油,沉默克星|你是王者峡谷的初恋与最稳基石。没有花里胡哨的机制，只有最扎实的沉默和护盾，克制一切花里胡哨。|6,8,8,6,6,5,2,6|01111111",
+    "吕布|从此刻开始，战场由我一人主宰！|对抗路|真伤战神,魔神降世|你是绝对的线霸和团战杀神。信奉一力破十会，哪怕前期被针对，只要跳出毁天灭地的大招，你敢以魔神之姿战至最后。|8,7,9,7,4,3,5,7|10000001",
+    "蒙恬|军阵如山！|对抗路|一人成军,正面无敌|你信奉极致的军纪与阵地战。大招一开，一人便是一支军队，只要正面迎敌，你就不知道什么叫退缩。|8,8,8,6,5,2,5,8|10000011",
+    "苏烈|长城在，故乡就在！|游走|两条命,大闪核弹|你是个有着两条命的铁血壮汉。隐藏在草丛中蓄力，只为那大闪毁天灭地的一拍，瞬间扭转所有的逆风。|5,9,9,5,10,4,5,4|10000100",
+    "大司命|生死契阔，皆由命定。|打野|命运裁决,收割幽灵|你是冷酷无情的命运裁决者。穿梭于生死之间，用无视地形的游走和致命的连击收割残局。|8,5,6,7,4,8,7,5|10000111",
+    "海诺|命运，可以倒流。|中单|时空回溯,近远双形|你是神秘的时空掌控者。拥有常人无法理解的容错率，能在近战与远程之间游刃有余地切换。|7,7,7,7,3,6,8,8|10001001",
+    "上官婉儿|言为心声，字为心画！|中单|飞天法刺,千里取首|你是天生的刺客艺术家。不受地形束缚，越塔强杀是家常便饭。只要秀出了绝美连招，这局就没白玩。|9,3,7,6,2,8,9,2|10001010",
+    "诸葛亮|运筹帷幄之中，决胜千里之外！|中单|残血收割,算无遗策|你是战场上的超级大脑。不靠无脑对拼，靠拉扯压低血线，最终用大招连环收割，懂得在安全前提下输出最大化。|8,4,8,8,2,8,7,4|10001100",
+    "海月|月如明镜，照见人心！|中单|小黑屋,强制单挑|你是个喜欢制定规则的掌控者。一旦发现对面的核心破绽，你会果断将其拉入你的绝对领域进行制裁。|8,5,7,6,8,3,6,5|10001110",
+    "妲己|请尽情吩咐妲己，主人。|中单|草丛三婊,无脑秒杀|你是个简单纯粹的杀手。不需要复杂的操作，只要蹲在草丛里，321一套素质连招，让对面体会什么叫血条消失术。|9,2,6,6,7,2,2,1|10010000",
+    "弈星|若世有神明，亦会胜他半子！|中单|圈养猪仔,优雅控场|你将峡谷视为棋盘，万物皆为棋子。你享受那种谋定而后动、用巨大棋盘将敌人困为笼中之鸟的优雅。|7,5,9,6,9,3,6,8|10010011",
+    "沈梦溪|没有什么是炸弹解决不了的！|中单|大招清屏,游走支援|你性格活泼极具侵略性。快速清完线就去支援，后期的两个大招砸向人群，是你对这场团战最完美的谢幕。|9,4,9,7,3,8,6,7|10010101",
+    "干将莫邪|一剑穿心！|中单|秒杀法师,几何预判|你是无情的几何学大师。冷酷计算弹道走位，在极远处用四剑全中瞬间蒸发对手，你看似孤高实则需要队友争取时间。|10,3,7,8,2,2,8,2|10010110",
+    "百里守约|给我一个目标，还你一片寂静。|发育路|远程狙击,心理博弈|你是一个冷静的狙击手。偏爱在安全距离外掌控生死，每一发子弹都是心理博弈，你在敌方就不敢露视野。|8,3,4,7,3,4,8,4|10011000",
+    "公孙离|红叶最多情，一舞寄相思。|发育路|花里胡哨,戏耍敌人|你是让对手最头疼的幻影。用眼花缭乱的位移戏耍靠近你的人。你极度自信，没人能轻易触碰你的衣角。|8,4,7,7,2,10,10,8|10011011",
+    "马可波罗|世界那么大，我想来看看。|发育路|真伤射手,刺客心|你是一个不羁的游侠。作为射手却有刺客的心跳，总按捺不住转大进场，享受最危险距离倾泻火力的快感。|8,4,8,7,2,8,8,6|10011101",
+    "戈娅|沙暴，听我号令！|发育路|灵动漂移,风筝女王|你是峡谷中最灵动的飙车族。在漂移中倾泻火力让你极具安全感，打得过就追，打不过就踩油门跑。|8,5,8,8,4,8,7,8|10011111",
+    "艾琳|精灵之舞！|发育路|法系射手,灵动滑步|你是高贵的精灵射手。用灵动的滑步和法术暴击撕裂对面的防线，是所有物理高护甲坦克的天然克星。|8,4,8,8,3,7,6,8|10100001",
+    "孙尚香|大小姐驾到，统统闪开！|发育路|后期大核,灵活爆发|你是团队的绝对王牌。前期猥琐后期接管比赛。不是原地的靶子，而是通过灵活翻滚寻找最佳输出位，用最暴力伤害终结悬念。|10,4,8,9,1,7,7,3|10100010",
+    "莱西奥|火炮，就是男人的浪漫！|发育路|滞空开火,火炮轰炸|你是飞天遁地的火炮手。热爱在空中俯视敌人的感觉，用暴风骤雨般的轰炸粉碎一切阻碍。|9,4,8,8,2,7,6,6|10100101",
+    "敖隐|真龙降世，雷霆万钧！|发育路|真龙之力,滞空爆发|你体内流淌着高傲的龙血。能在绝境中腾空而起，用雷霆与烈火倾泻最猛烈的复仇。|9,5,7,8,4,6,7,4|10100110",
+    "苍|苍天已死，黄天当立！|中单|乱世领袖,群伤爆发|你是搅动风云的乱世枭雄。拥有强大的群体统治力，在团战中能用大范围的技能摧毁敌方的阵型。|9,4,9,7,6,4,7,5|10101001",
+    "后羿|觉醒吧，猎杀时刻！|发育路|站桩输出,全图支援|你是团队最稳健的火力台。凭借极致的走A就能打出成吨伤害，一发全图的大鸟往往能吹响翻盘号角。|9,2,9,8,3,2,4,9|10101011",
+    "伽罗|千窟为佑，太平无忧。|发育路|手长优势,护盾克星|你是令人窒息的温水煮青蛙。站在所有人都碰不到的地方折磨对手，只要高地还在就有自信守到天荒地老。|9,2,8,9,2,2,5,9|10101101",
+    "鲁班七号|智商二百五，极度膜拜！|发育路|站桩输出,自带仇恨|你是峡谷最具嘲讽脸的存在。没有位移命靠队友保，只要给三秒输出环境能把前排融化。心态极佳被抓十次依然乐呵呵。|10,1,9,8,2,2,3,9|10101111",
+    "黄忠|是时候来发激烈的了！|发育路|架炮洗地,逆风翻盘|你是最恐怖的阵地战大师。只要你坐下架起重炮，你的圈就是最安心的堡垒，只要辅助保住你就能轰平一切。|10,3,9,8,2,2,4,9|10110001",
+    "狄仁杰|代表法律制裁你！|发育路|真正的战士,平推机器|你是个自带解控的“战士型”射手。只要黄牌定住，你就敢追着刺客点。你讲究规则与效率，是冷酷的推塔机器。|9,4,8,8,5,3,4,8|10110011",
+    "虞姬|明媚如风，轻盈似箭！|发育路|物理免疫,优雅射手|你是一个极其缺乏安全感的射手。因此拥有最强的物理免疫技能。不把命交给辅助，相信靠拉扯也能秀死刺客。|8,6,7,8,4,5,5,7|10110101",
+    "李元芳|做个狂热的粉丝！|发育路|推塔控龙,前期射手|你是个机灵的情报官。最喜欢在前中期带着打野狂控资源，把爆炸的飞镖挂在塔上，享受瞬间爆破的快感。|8,5,7,8,3,6,6,4|10110110",
+    "蒙犽|火力全开！|发育路|加特林,情绪输出|你是个暴躁的重炮手。只要情绪一上来，就会端起加特林疯狂扫射，用最密集的火力覆盖整个屏幕。|9,4,9,8,1,4,5,9|10111001",
+    "元流之子(法师)|万物生发，元素掌控！|中单|全能法控,范围消耗|你是掌控元素的万能法师。能在消耗与爆发之间自由切换，用多变的法术在团战中呼风唤雨。|8,4,8,7,7,5,7,7|10111011",
+    "扁鹊|生存还是死亡，这是个问题。|中单|毒奶双修,慢性死亡|你是个让人极其难受的毒医。既能把队友从死亡线上拉回来，也能给敌人叠满五层毒药，看着他们绝望地倒在塔下。|7,6,8,7,2,2,4,9|10111101",
+    "甄姬|若轻云之蔽月，若流风之回雪。|中单|弹弹弹,简单恶心|你拥有最平易近人的操作，能在混乱团战中打出最致命连环冰冻。性格温和不争不抢，但在人堆丢个大招就是MVP。|8,3,9,6,9,2,4,6|10111111",
+    "王昭君|凛冬已至！|中单|工具人天花板,分割战场|你是最理智冷酷的控场女王。不追求个人单杀，将冰雪覆盖敌方必经之路。大招分割战场是所有无位移英雄噩梦。|7,5,9,6,9,2,5,7|11000001",
+    "安琪拉|知识，就是力量！|中单|草丛三婊,暴力烤串|你是个看似呆萌实则暴躁的小萝莉。最喜欢蹲在草丛里，等一个倒霉蛋路过，然后用一根粗壮的火柱将他瞬间蒸发。|9,3,7,6,5,2,3,1|11000010",
+    "小乔|花会枯萎，爱永不凋零！|中单|法核爆发,大风扇|你是一个外表可爱内心暴力的法核。前期唯唯诺诺，后期装备成型后，一个大风扇吹起来，能把三个大汉瞬间秒杀。|9,3,8,8,5,4,5,3|11000100",
+    "元流之子(坦克)|万物生发，不动如山！|对抗路|坚实壁垒,百变承伤|你是前排坚不可摧的壁垒。能够根据敌方阵容灵活调整防御姿态，为团队吸收成吨伤害。|4,9,8,5,7,4,5,6|11000111",
+    "孙权|江东子弟，何惧于天下！|中单|统帅全局,防守反击|你是天生的战术大师与守成之主。极具耐心，擅长在防守中寻找破绽，指挥团队发起致命的反击。|7,6,9,7,8,4,6,7|11001001",
+    "张飞|心有猛虎，啸咤风云！|游走|绝对前排,怒吼天尊|平时套着盾探视野忍辱负重。当敌方试图切你家C位时，化身狂兽用毁天灭地的大招喷碎幻想，有保护队友的绝对决心。|3,10,9,4,8,5,4,4|11001010",
+    "牛魔|牛气冲天，纯爷们！|游走|硬汉辅助,双抗光环|你是一个不折不扣的硬汉。只要站在队友身边他们就有安全感。大局观极佳，能果断大闪开团或挡下致命伤。|3,9,9,5,9,5,5,4|11001100",
+    "东皇太一|展现你的敬畏吧！|游走|吸血霸主,强换一命|你是个不在乎自己死活的狠角色。你的眼里只有对面的核心大C，只要闪现大招咬住，哪怕同归于尽也算是胜利。|4,9,8,4,10,2,3,7|11001111",
+    "鬼谷子|万物皆有灵。|游走|全军出击,诡秘开团|你是团队的大脑和节奏发动机。用隐身带着队友发动闪电战，只要有你在，敌方永远处于草木皆兵的恐慌中。|2,5,9,4,10,7,7,5|11010001",
+    "盾山|（机械运转声）|游走|修塔狂魔,机制克星|你是队友面前的叹息之墙。为了团队你愿意放弃一切输出，举起盾牌没收所有飞行物，是射手永远的爹。|2,9,8,3,8,3,5,6|11010011",
+    "鲁班大师|无知，是最大的原罪！|游走|极致保人,开团链子|你是高级局最抢手的指挥官。能给腿短的队友插上翅膀，更能用闪现大招瞬间撕裂敌方阵型。|2,7,9,5,9,6,8,5|11010101",
+    "刘禅|龙城飞将，前来拜访！|游走|拆迁队长,夹子哥|你是个毫无感情的拆迁队长。别人打架你推塔，带着干扰直接冲进防御塔一顿乱砸，你的快乐就是看着防御塔倒塌。|4,8,7,5,9,5,3,6|11010111",
+    "钟馗|垃圾，就该待在垃圾桶里！|游走|神仙夺命钩,抽奖摸鱼|你是峡谷最不讲道理的抽奖大师。无论顺风逆风，只要你在高地前盲钩中对面的C位，这一局你们就赢了。|5,6,8,4,9,2,6,3|11011000",
+    "墨子|心平气和，纯粹的逻辑！|中单|全屏消耗,稳定上分|你信奉纯粹逻辑距离控制。讨厌近身肉搏，喜欢在安全距离一炮炮折磨敌人。你是分奴眼中最稳妥的上分利器。|6,6,8,7,9,4,5,8|11011011",
+    "周瑜|既生瑜，何生亮！|中单|铺火烧山,阵地推进|你是一个掌控火海的无情纵火犯。不求瞬间秒杀，只要把火铺满整个屏幕，让敌人在绝望的灼烧中看着塔倒下。|8,5,8,7,6,2,5,9|11011101",
+    "嬴政|天上天下，唯朕独尊！|中单|飞剑洗地,顺风压塔|你拥有帝王般的睥睨视角。只要大招开启没有敌人敢越雷池一步，稳健掌控兵线防御塔，用最密集火力宣告主权。|9,4,8,8,2,4,5,9|11011111",
+    "西施|最有价值之物，给最珍贵之人。|中单|强制位移,工具法|你是最聪明的战术法师。不需要自己打伤害，只要用纱线牵着敌人走到队友的火力网中就算圆满完成任务。|5,4,9,6,10,3,7,6|11100001",
+    "金蝉|万物皆有因果。|中单|紧箍神咒,克制突进|你是一个悲天悯人的修行者。你不喜欢无脑的杀戮，而是用最克制机制的紧箍咒，让所有刺客寸步难行。|6,7,8,6,9,2,5,7|11100011",
+    "姜子牙|愿者上钩。|中单|经验封神,超远大招|你是掌控天道的老者。前期默默提供经验增益，后期用一个屏幕外的大招教对面什么是真正的毁天灭地。|8,3,8,7,6,2,4,5|11100100",
+    "女娲|我们开创文明！|中单|造物主,创世神|你用上帝视角俯瞰整个峡谷。用矩阵封锁路线，用全图大招支援，只要有你在，水晶前就是无法逾越的天堑。|7,4,9,7,8,3,6,7|11100111",
+    "武则天|奉我为主！|中单|钞能力,全屏大招|你是最高贵的女帝。不屑于近身肉搏，站在最后方用无孔不入的控制和全屏幕的制裁大招，彰显你无与伦比的压制力。|7,5,9,7,9,2,4,7|11101001",
+    "大乔|守望着天空，大海，和你的回忆。|游走|电梯流,运营大师|你是最强的战术调度师。不拼数值拼脑子，用极致的传送拉扯将运营发挥到极致，是让对手最绝望的体系核心。|2,6,9,4,9,8,8,8|11101011",
+    "孙膑|时间和波浪，变化无常！|游走|拉扯之王,时光倒流|你是个表面软萌实则上限极高的战术辅助。利用时光倒流带队友七进七出搞崩对面心态，后期你的存在就是不败底气。|3,7,9,5,7,7,6,8|11101101",
+    "蔡文姬|出发咯，蹂躏脑筋不好的老年人！|游走|移动泉水,可爱萌神|你是团队的超级血包和精神支柱。没有杀伤力但队友有安全感。弹弹弹是唯一的调皮，拯救濒死队友是最大成就。|1,7,9,5,8,4,2,9|11101111",
+    "瑶|阿瑶为你痛哭！|游走|挂件,羁绊守护|你是最重感情的精灵。只在乎能不能骑在信任的人头上套上护盾。你证明了信任与羁绊比操作更重要。|2,7,8,4,8,6,2,9|11110001",
+    "明世隐|花如盛世妖星，以绝胜不测！|游走|第七件装备,数值怪|你是最极端的辅助。要么牵着队友让他变成毁天灭地的战神，要么大招给出自己最后的生命，孤注一掷。|3,6,8,5,4,4,3,8|11110011",
+    "太乙真人|等价交换，炼金术的不变法则！|游走|复活甲,连体核心|你是个极其功利的辅助。懂得养大C的道理，紧贴射手提供金币和第二条命。有你在，队友永远有底气犯错。|3,8,8,6,8,5,6,6|11110101",
+    "庄周|蝴蝶是我，我就是蝴蝶。|游走|混子鱼,群体解控|你是一个逍遥法外的食梦者。全场梦游没人能抓死你，在团战最关键时刻开出一个大招解控，深藏功与名。|4,9,8,5,3,6,2,8|11110111",
+    "朵莉亚|听，海的声音！|游走|刷新技能,人鱼之歌|你是队友眼中最可爱的小人鱼。你不需要去打打杀杀，只要唱起歌声刷新队友的大招，就能扭转乾坤。|3,6,9,4,7,6,6,8|11111001",
+    "桑启|萤火，照亮前路。|游走|种草飞翔,萤火治疗|你是森林里活泼的小精灵。用满天飞舞的萤火虫治愈队友，用种草飞行的机制快乐地穿梭战场。|3,7,9,4,7,8,6,8|11111011",
+    "少司缘|缘起缘灭，皆由我定。|游走|红线牵引,命运辅助|你相信宿命与缘分。在战场上，你用无形的红线连接队友与敌人，通过精妙的拉扯改变战局的走向。|4,6,9,4,8,7,8,7|11111101",
+    "杨玉环|云想衣裳花想容。|中单|奶弓双修,极限拉扯|你是气质高雅的贵妃。在输出与治疗之间完美切换，利用无法选中的大招在极限边缘优雅拉扯。|7,6,9,7,5,4,8,9|11111111",
+    "元流之子(辅助)|万物生发，守护之心！|游走|全能辅助,灵活增益|你拥有极强的适应能力。不仅能提供护盾与增益，还能在团战中灵活补位，是队友最可靠的万能后盾。|3,7,9,4,8,6,6,8|11111110" 
+];
+
+// 解析全英雄图谱库
+const heroLibrary = [];
+rawHeroData.forEach(row => {
+    const parts = row.split('|');
+    heroLibrary.push({
+        name: parts[0], 
+        slogan: parts[1], 
+        role: parts[2],
+        tags: parts[3], 
+        desc: parts[4], 
+        stats: parts[5].split(',').map(Number),
+        bin: parts[6] // 理想的8维0/1标识
+    });
+});
+
+let currentQ = 0;
+let scores = [0, 0, 0, 0, 0, 0, 0, 0]; // 8 个维度的得分
+let historyStack = [];
+
+function startTest() {
+    document.getElementById('page-intro').style.display = 'none';
+    document.getElementById('page-test').style.display = 'flex';
+    renderQ();
+}
+
+function renderQ() {
+    const q = questions[currentQ];
+    document.getElementById('progress-bar').style.width = ((currentQ + 1) / 24 * 100) + '%';
+    document.getElementById('q-counter').innerText = `${currentQ + 1} / 24`;
+    const dimNames = ["I: 团队定位", "II: 操作倾向", "III: 节奏风格", "IV: 决策偏好", "V: 心理素质", "VI: 局势掌控", "VII: 距离偏好", "VIII: 输出节奏"];
+    document.getElementById('dim-text').innerText = dimNames[q.dim];
+
+    const qBox = document.getElementById('q-box');
+    qBox.classList.remove('slide-up');
+    void qBox.offsetWidth;
+    qBox.classList.add('slide-up');
+
+    document.getElementById('q-text').innerText = `${currentQ + 1}. ${q.text}`;
+    
+    const optList = document.getElementById('opt-list');
+    optList.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('div');
+        btn.className = 'opt-btn';
+        btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span> <span style="flex:1;">${opt.t}</span>`;
+        btn.onclick = () => handleAnswer(q.dim, opt.v);
+        optList.appendChild(btn);
+    });
+    document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+}
+
+function handleAnswer(dim, val) {
+    historyStack.push({ dim, val });
+    scores[dim] += val;
+    if (currentQ < 23) {
+        currentQ++;
+        setTimeout(renderQ, 150);
+    } else {
+        showLoading();
+    }
+}
+
+function prevQ() {
+    if (currentQ > 0 && historyStack.length > 0) {
+        const lastAction = historyStack.pop();
+        scores[lastAction.dim] -= lastAction.val;
+        currentQ--;
+        renderQ();
+    }
+}
+
+function showLoading() {
+    document.getElementById('page-test').style.display = 'none';
+    document.getElementById('page-loading').style.display = 'flex';
+    setTimeout(calcResult, 2200);
+}
+
+function calcResult() {
+    // 使用 KNN (欧几里得距离思想) 从 130 个英雄中找出潜意识得分距离最近的
+    let bestHero = heroLibrary[0];
+    let maxMatchPercent = 0;
+
+    heroLibrary.forEach(h => {
+        let diff = 0;
+        for(let i=0; i<8; i++) {
+            // 用户的得分单维度最大为 3 (3个问题全选 1)。理想状态下，英雄偏向 1 则得分为 3，偏向 0 则得分为 0
+            let idealScore = h.bin[i] === "1" ? 3 : 0;
+            diff += Math.abs(scores[i] - idealScore);
+        }
+        
+        // 最大总差异是 8个维度 * 每个维度最大差3 = 24
+        let matchPercent = ((24 - diff) / 24) * 100;
+        
+        // 增加极微小的随机扰动（解决绝对同分并列时的覆盖问题，带来算命般的“缘分”）
+        matchPercent += Math.random() * 0.05;
+
+        if(matchPercent > maxMatchPercent) {
+            maxMatchPercent = matchPercent;
+            bestHero = h;
+        }
+    });
+
+    renderResult(bestHero, scores, maxMatchPercent);
+}
+
+function renderResult(res, rawScores, percent) {
+    document.getElementById('page-loading').style.display = 'none';
+    document.getElementById('page-result').style.display = 'block';
+
+    // 动态挂载头像，位于 image 文件夹下，兼容 png 与 jpg，加载失败时自动隐藏父容器
+    const avatarBox = document.getElementById('avatar-box');
+    avatarBox.style.display = 'block'; // 恢复显示（重测时用到）
+    avatarBox.innerHTML = `<img src="image/${res.name}.png" onerror="this.onerror=null; this.src='image/${res.name}.jpg'; this.onerror=function(){ this.parentElement.style.display='none'; };" class="hero-image" alt="${res.name}">`;
+
+    // 契合度显示
+    document.getElementById('res-match-percent').innerText = `本命契合度 ${(percent).toFixed(1)}%`;
+
+    document.getElementById('res-name').innerText = res.name;
+    document.getElementById('res-slogan').innerText = `“${res.slogan}”`;
+    document.getElementById('res-desc').innerText = res.desc;
+    document.getElementById('res-role').innerText = res.role;
+    const tags = res.tags.split(',');
+    document.getElementById('res-tags').innerHTML = tags.map(t => `<span class="hero-tag">#${t}</span>`).join('');
+
+    renderSpectrumBars(rawScores);
+    setTimeout(() => { drawRadar(res.stats); }, 400);
+}
+
+// 渲染全新双极图谱
+function renderSpectrumBars(rawScores) {
+    const container = document.getElementById('trait-bars');
+    const traitNames = [
+        ["孤胆独狼", "团队核心"], ["极限微操", "大局意识"], ["激进入侵", "稳健发育"],
+        ["冲锋强开", "防守拉扯"], ["理智上分", "快乐随性"], ["前期压制", "后期接管"], 
+        ["近身肉搏", "远程消耗"], ["瞬间爆发", "持续折磨"]
+    ];
+    let html = '';
+    for(let i=0; i<8; i++) {
+        // 计算百分比位置 (5% ~ 95% 防止游标超出边框)
+        const percent = Math.max(5, Math.min(95, (rawScores[i] / 3) * 100));
+        const isLeft = percent <= 50;
+        
+        html += `
+        <div class="spectrum-row">
+            <div class="spectrum-labels">
+                <span class="${isLeft ? 'active-left' : ''}">${traitNames[i][0]}</span>
+                <span class="${!isLeft ? 'active-right' : ''}">${traitNames[i][1]}</span>
+            </div>
+            <div class="spectrum-track">
+                <div class="spectrum-marker" style="left: ${percent}%;"></div>
+            </div>
+        </div>`;
+    }
+    container.innerHTML = html;
+}
+
+// 绘制八维放大版雷达图
+function drawRadar(stats) {
+    const canvas = document.getElementById('radarChart');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth; const h = canvas.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+
+    const cx = w / 2; const cy = h / 2 + 5;
+    const r = Math.min(w, h) / 2.8; // 半径扩大，撑满画布
+    const sides = 8;
+    const labels = ["爆发输出", "生存承伤", "团战拉扯", "发育运营", "控制增益", "灵动游走", "操作门槛", "持续消耗"];
+
+    // 浅色网格底线 (八边形)
+    ctx.lineWidth = 1;
+    for(let i=1; i<=4; i++) {
+        ctx.beginPath();
+        for(let j=0; j<sides; j++) {
+            const angle = (Math.PI*2/sides)*j - Math.PI/2;
+            const radius = (r/4)*i;
+            if(j===0) ctx.moveTo(cx + Math.cos(angle)*radius, cy + Math.sin(angle)*radius);
+            else ctx.lineTo(cx + Math.cos(angle)*radius, cy + Math.sin(angle)*radius);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = i === 4 ? '#cbd5e1' : '#e2e8f0';
+        ctx.stroke();
+    }
+
+    // 中心连线
+    ctx.beginPath();
+    for(let j=0; j<sides; j++) {
+        const angle = (Math.PI*2/sides)*j - Math.PI/2;
+        ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle)*r, cy + Math.sin(angle)*r);
+    }
+    ctx.strokeStyle = '#e2e8f0'; ctx.stroke();
+
+    // 浅蓝色水晶填充
+    ctx.beginPath();
+    for(let j=0; j<sides; j++) {
+        const angle = (Math.PI*2/sides)*j - Math.PI/2;
+        let val = Math.max(0.15, stats[j]/10); 
+        if(j===0) ctx.moveTo(cx + Math.cos(angle)*r*val, cy + Math.sin(angle)*r*val);
+        else ctx.lineTo(cx + Math.cos(angle)*r*val, cy + Math.sin(angle)*r*val);
+    }
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(14, 165, 233, 0.2)'; 
+    ctx.fill();
+    ctx.strokeStyle = '#0ea5e9'; 
+    ctx.lineWidth = 2.5; 
+    ctx.stroke();
+    
+    // 节点圆点
+    for(let j=0; j<sides; j++) {
+        const angle = (Math.PI*2/sides)*j - Math.PI/2;
+        let val = Math.max(0.15, stats[j]/10); 
+        ctx.beginPath(); ctx.arc(cx + Math.cos(angle)*r*val, cy + Math.sin(angle)*r*val, 5, 0, Math.PI*2);
+        ctx.fillStyle = '#fff'; ctx.fill();
+        ctx.strokeStyle = '#0ea5e9'; ctx.lineWidth = 2.5; ctx.stroke();
+    }
+
+    // 文字标签加大
+    ctx.fillStyle = '#475569'; ctx.font = '700 14px sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    
+    for(let j=0; j<sides; j++) {
+        const angle = (Math.PI*2/sides)*j - Math.PI/2;
+        const dist = r + 26; // 标签向外推拉
+        ctx.fillText(labels[j], cx + Math.cos(angle)*dist, cy + Math.sin(angle)*dist);
+    }
+}
+</script>
+<!-- 
+  =======================================================
+  🔒 网页防伪提示锁 (米大师定制版) - 移动端完美适配版
+  使用说明：
+  1. 修改 MAX_USES 为限制的次数（默认6次）。
+  2. 将代码粘贴到网页文件的 </body> 标签之前。
+  =======================================================
+-->
+
+<style>
+    /* 锁屏界面样式 */
+    #gate-modal {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: #ffffff;
+        z-index: 2147483647;
+        display: flex; flex-direction: column; 
+        /* 【修复 1】移除 justify-content: center; 改为允许垂直滚动 */
+        overflow-y: auto; 
+        padding: 40px 20px; /* 增加上下 padding 防止贴边 */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+        transition: opacity 0.5s;
+    }
+    
+    .gate-card {
+        background: #fff; width: 100%; max-width: 340px; padding: 40px 30px;
+        border-radius: 24px; 
+        box-shadow: 0 15px 50px rgba(0,0,0,0.08); text-align: center;
+        border: 1px solid #fff5f7; 
+        /* 【修复 2】使用 margin: auto 进行安全的垂直居中。屏幕太小时会自动顶对齐并允许滚动 */
+        margin: auto;
+        position: relative;
+        overflow: hidden;
+        /* 【修复 3】严格控制盒模型，防止 padding 撑破容器 */
+        box-sizing: border-box; 
+    }
+    
+    /* 视图切换容器 */
+    .view-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeIn 0.4s ease;
+        width: 100%;
+    }
+    .view-container.active {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 头像样式 */
+    .avatar-wrapper {
+        width: 80px; height: 80px;
+        background: #ffe6eb; 
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 12px;
+        font-size: 42px;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 15px rgba(255, 36, 66, 0.15);
+    }
+
+    .brand-tag {
+        display: inline-block;
+        background: #f8f8f8;
+        color: #999;
+        font-size: 11px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        letter-spacing: 0.5px;
+    }
+    
+    .gate-title { font-size: 20px; font-weight: 800; color: #333; margin-bottom: 12px; line-height: 1.4; }
+    
+    .gate-desc { 
+        font-size: 14px; color: #666; margin-bottom: 25px; 
+        line-height: 1.6; 
+    }
+
+    /* 按钮样式 */
+    .action-btn {
+        width: 100%; padding: 15px; border-radius: 50px; 
+        font-size: 15px; font-weight: bold; cursor: pointer; 
+        transition: all 0.2s; margin-bottom: 12px;
+        border: none; outline: none;
+        /* 【修复 4】确保按钮自身尺寸计算包含 padding */
+        box-sizing: border-box;
+        display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+        line-height: 1.4;
+    }
+    .action-btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #ff2442, #ff5e75);
+        color: white; 
+        box-shadow: 0 4px 15px rgba(255, 36, 66, 0.3);
+    }
+    .btn-secondary {
+        background: #f5f5f5;
+        color: #666;
+    }
+    .btn-secondary:hover { background: #eeeeee; }
+
+    .gate-err { 
+        color: #ff2442; font-size: 13px; margin-top: 5px; height: 18px; 
+        opacity: 0; transition: opacity 0.3s; font-weight: 600; 
+    }
+    
+    .loading-layer {
+        position: absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.98);
+        display: none; flex-direction: column;
+        align-items: center; justify-content: center; z-index: 10;
+    }
+    .spinner {
+        width: 32px; height: 32px; border: 3px solid #ffe6eb;
+        border-top: 3px solid #ff2442; border-radius: 50%;
+        animation: spin 1s linear infinite; margin-bottom: 15px;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+</style>
+
+<div id="gate-modal">
+    <div class="gate-card" id="main-card">
+        
+        <!-- ================= 视图1：防伪提问 ================= -->
+        <div class="view-container active" id="view-question">
+            <div class="avatar-wrapper" style="background: #f0f7ff; box-shadow: 0 4px 15px rgba(36, 131, 255, 0.15);">🐱</div>
+            <div class="gate-title">温馨提示</div>
+            <div class="gate-desc" style="color: #333; font-weight: 500;">
+                为了保障您的体验<br>请问您购买本测试的店铺是<br><span style="color:#ff2442; font-weight:bold; font-size:16px;">“心理米大师的店”</span> 吗？
+            </div>
+            
+            <button class="action-btn btn-primary" onclick="switchView('view-cover')">
+                对，确认无误，就是<span style="font-size: 18px; font-weight: 900; color: #ffe895; text-shadow: 0 1px 3px rgba(0,0,0,0.2); margin-left: 4px;">心理米大师</span>
+            </button>
+            <button class="action-btn btn-secondary" onclick="switchView('view-warning')">
+                好像不是，可能是别的店铺
+            </button>
+        </div>
+
+        <!-- ================= 视图2：正版欢迎页 ================= -->
+        <div class="view-container" id="view-cover">
+            <div class="avatar-wrapper">😻</div>
+            <div class="gate-title">米大师的私密测试空间</div>
+            <div class="brand-tag">@心理米大师 · 专注高质量心理测试</div>
+            
+            <div class="gate-desc">
+                Hi 宝子 👋<br>
+                <strong style="color:#ff2442;">请认准心理米大师</strong><br>
+                小店所有测试都是本人亲自制作<br>
+                欢迎宝子们进店选购 ✨
+            </div>
+            
+            <button class="action-btn btn-primary" onclick="unlockPage()">✨ 开启专属测试 ✨</button>
+            <div class="gate-err" id="gate-msg"></div>
+            
+            <!-- 剩余次数提示 -->
+            <div style="margin-top:10px; font-size:11px; color:#bbb;" id="limit-hint"></div>
+        </div>
+
+        <!-- ================= 视图3：盗版提示页 ================= -->
+        <div class="view-container" id="view-warning">
+            <div class="avatar-wrapper" style="background: #fff0f0;">😿</div>
+            <div class="gate-title">好像遇到盗版了...</div>
+            
+            <div class="gate-desc" style="text-align: left;">
+                麻烦宝子仔细确认一下，如果店铺名称确实不叫<strong style="color:#ff2442;">心理米大师</strong>，麻烦您帮我举报一下哦！<br><br>
+                如果可以私信告诉我，那就更好啦，非常感谢你的支持和正义感 ❤️
+            </div>
+            
+            <button class="action-btn btn-secondary" onclick="switchView('view-question')">返回重新选择</button>
+        </div>
+
+        <!-- 动画层 -->
+        <div class="loading-layer" id="load-layer">
+            <div class="spinner"></div>
+            <div style="font-size:13px; color:#333; font-weight:bold;" id="load-text">正在加载...</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ================= 配置区域 =================
+    const MAX_USES = 6;                // 同一台设备限制的次数
+    // ==========================================
+
+    const pageId = window.location.pathname; // 区分不同页面的缓存
+    const usageKey = 'usage_count_' + pageId; // 本地存储Key
+
+    // 1. 检查Session（本次会话是否已解锁）
+    if (sessionStorage.getItem('unlocked_' + pageId)) {
+        document.getElementById('gate-modal').style.display = 'none';
+    }
+
+    // 2. 初始化显示剩余次数
+    function updateLimitUI() {
+        let currentUsage = parseInt(localStorage.getItem(usageKey) || '0');
+        let remaining = Math.max(0, MAX_USES - currentUsage);
+        document.getElementById('limit-hint').innerText = `本设备剩余可用次数：${remaining}次`;
+    }
+    updateLimitUI();
+
+    // 3. 切换视图功能
+    function switchView(viewId) {
+        document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+    }
+
+    // 4. 解锁页面功能
+    function unlockPage() {
+        const msg = document.getElementById('gate-msg');
+        let usedCount = parseInt(localStorage.getItem(usageKey) || '0');
+        
+        // 检查次数
+        if (usedCount >= MAX_USES) {
+            msg.innerText = `宝子，本设备的测试次数已用完啦 (${MAX_USES}/${MAX_USES})`;
+            msg.style.opacity = 1;
+            shakeCard();
+            return;
+        }
+
+        // --- 验证通过 ---
+        msg.style.opacity = 0;
+        
+        // 1. 扣除次数
+        localStorage.setItem(usageKey, usedCount + 1);
+        
+        // 2. 播放动画
+        document.getElementById('load-layer').style.display = 'flex';
+        const txt = document.getElementById('load-text');
+        
+        setTimeout(() => { txt.innerText = "正在加载专属报告..."; }, 800);
+        setTimeout(() => { 
+            let left = MAX_USES - (usedCount + 1);
+            txt.innerText = `加载成功！(剩余${left}次)`; 
+            txt.style.color = "#ff2442"; 
+        }, 1500);
+        
+        // 3. 解锁页面
+        setTimeout(() => {
+            sessionStorage.setItem('unlocked_' + pageId, 'true');
+            document.getElementById('gate-modal').style.opacity = 0;
+            setTimeout(() => { 
+                document.getElementById('gate-modal').style.display = 'none'; 
+            }, 500);
+        }, 2500);
+    }
+
+    // 震动动画
+    function shakeCard() {
+        const card = document.getElementById('main-card');
+        card.style.animation = 'shake 0.3s';
+        setTimeout(() => { card.style.animation = ''; }, 300);
+    }
+</script>
+</body>
+</html>
