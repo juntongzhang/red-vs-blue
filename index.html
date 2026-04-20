@@ -570,7 +570,7 @@ function renderResult(res, rawScores, percent) {
     // 动态挂载头像，位于 image 文件夹下，兼容 png 与 jpg，加载失败时自动隐藏父容器
     const avatarBox = document.getElementById('avatar-box');
     avatarBox.style.display = 'block'; // 恢复显示（重测时用到）
-    avatarBox.innerHTML = `<img src="image/${res.name}.png" onerror="this.onerror=null; this.src='image/${res.name}.jpg'; this.onerror=function(){ this.parentElement.style.display='none'; };" class="hero-image" alt="${res.name}">`;
+    avatarBox.innerHTML = `<img src="images/${res.name}.png" onerror="this.onerror=null; this.src='image/${res.name}.jpg'; this.onerror=function(){ this.parentElement.style.display='none'; };" class="hero-image" alt="${res.name}">`;
 
     // 契合度显示
     document.getElementById('res-match-percent').innerText = `本命契合度 ${(percent).toFixed(1)}%`;
