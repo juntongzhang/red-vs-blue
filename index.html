@@ -118,7 +118,7 @@
         }
         .btn-back:hover { color: var(--text-title); }
 
-        /* ----- 结果页 (大幅优化排版与字号) ----- */
+        /* ----- 结果页 ----- */
         #page-result { display: none; min-height: 100vh; padding: 40px 22px 70px; }
 
         /* 英雄名片与头像 */
@@ -173,7 +173,6 @@
 
         /* ----- 雷达图放大 ----- */
         .radar-wrapper { display: flex; justify-content: center; margin: 15px 0; width: 100%; }
-        /* 画布稍微放大，匹配更清晰的阅读体验 */
         canvas { max-width: 100%; width: 340px; height: 310px;}
 
         /* ----- 全新图谱：潜意识双极剖析 ----- */
@@ -195,6 +194,34 @@
             transition: left 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
+        /* ----- 相似英雄推荐模块 ----- */
+        .similar-heroes-container {
+            display: flex; justify-content: space-between; gap: 12px; margin-top: 20px;
+        }
+        .similar-hero-card {
+            flex: 1; background: rgba(255,255,255,0.7); border-radius: 18px;
+            padding: 18px 10px 14px; text-align: center; border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+        .similar-hero-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.06); }
+        .similar-hero-avatar {
+            width: 64px; height: 64px; margin: 0 auto 12px; border-radius: 16px;
+            overflow: hidden; border: 2px solid #fff; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+            background: var(--bg-base); position: relative;
+        }
+        .similar-hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .sim-name { font-size: 15px; font-weight: 800; color: var(--text-title); margin-bottom: 6px;}
+        .sim-percent { font-size: 13px; color: var(--accent-gold); font-weight: 800; background: var(--accent-gold-light); padding: 3px 8px; border-radius: 12px; display: inline-block;}
+        
+        /* 图片加载失败的回退字母样式 */
+        .img-fallback {
+            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--accent-blue-light), #bae6fd);
+            color: var(--accent-blue); font-size: 28px; font-weight: 900;
+        }
+        .similar-hero-avatar .img-fallback { font-size: 24px; }
+
         /* ----- 判词与标签 ----- */
         .res-desc { font-size: 17px; line-height: 1.9; color: var(--text-title); text-align: justify; margin-bottom: 25px; padding: 15px 18px; background: #f8fafc; border-radius: var(--radius-md); font-weight: 500;}
         .tags-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 10px; }
@@ -212,7 +239,7 @@
     <h1 class="intro-title">王者荣耀<br><span style="font-size:30px; display:block; margin-top:12px; color:var(--accent-blue);">本命英雄测试</span></h1>
     <p class="intro-sub">
         八大维度深度拆解 × 256种潜意识星图<br>
-        KNN最邻近算法精准计算契合度<br>
+        超立方体距离测算模型<br>
         寻找峡谷中那个最真实的你
     </p>
     <button class="btn-primary" onclick="startTest()">推演天命</button>
@@ -237,26 +264,25 @@
 
 <div id="page-loading" class="container">
     <div class="spinner"></div>
-    <p style="margin-top:28px; color:var(--text-muted); font-size: 15px; font-weight:600; letter-spacing: 2px;">正在进行KNN潜意识距离匹配...</p>
+    <p style="margin-top:28px; color:var(--text-muted); font-size: 15px; font-weight:600; letter-spacing: 2px;">计算潜意识超空间距离...</p>
 </div>
 
 <div id="page-result" class="container">
-    <!-- 英雄名片与头像挂载点 -->
+    <!-- 英雄名片与头像 -->
     <div class="hero-id-card fade-in" style="animation-delay: 0.1s;">
         <div class="match-badge" id="res-match-percent">本命契合度 98.5%</div>
         <br>
         <div class="res-role-badge" id="res-role">对抗路</div>
         <h2 class="res-name" id="res-name">英雄名</h2>
         
-        <!-- 新增 1:1 图片画框 -->
         <div class="hero-image-box" id="avatar-box">
-            <!-- 头像图片在此动态生成 -->
+            <!-- 头像图片动态生成 -->
         </div>
 
         <div class="res-slogan" id="res-slogan">"台词"</div>
     </div>
 
-    <!-- 1. 八维雷达图 (全面放大) -->
+    <!-- 1. 八维雷达图 -->
     <div class="card fade-in" style="animation-delay: 0.2s;">
         <div class="card-header">本命八维战力图</div>
         <div class="radar-wrapper">
@@ -269,9 +295,17 @@
         <div class="card-header">潜意识双极剖析</div>
         <div class="spectrum-container" id="trait-bars"></div>
     </div>
-
-    <!-- 3. 英雄判词 -->
+    
+    <!-- 3. 相似英雄推荐模块 -->
     <div class="card fade-in" style="animation-delay: 0.4s;">
+        <div class="card-header">星轨共鸣 · 相似推荐</div>
+        <div class="similar-heroes-container" id="similar-heroes">
+            <!-- 动态注入三个相似英雄 -->
+        </div>
+    </div>
+
+    <!-- 4. 英雄判词 -->
+    <div class="card fade-in" style="animation-delay: 0.5s;">
         <div class="card-header">英雄判词</div>
         <div class="tags-container" id="res-tags"></div>
         <div class="res-desc" id="res-desc">描述内容</div>
@@ -282,17 +316,8 @@
 
 <script>
 /**
- * 8大维度 (24题) - 覆盖256种潜意识组合
- * D0: 孤狼单带(0) vs 团队抱团(1)
- * D1: 极限微操(0) vs 稳健意识(1)
- * D2: 激进入侵(0) vs 稳健发育(1)
- * D3: 先手开团(0) vs 后手反打(1)
- * D4: 理智上分(0) vs 快乐游戏(1)
- * D5: 前期压制(0) vs 后期大核(1)
- * D6: 近身肉搏(0) vs 远程消耗(1)
- * D7: 瞬间爆发(0) vs 持续折磨(1) 【全新第八维度】
+ * 8大维度 (24题)
  */
-
 const questions = [
     // D0 (团队)
     { text: "面对敌方残血英雄逃亡，你更倾向于：", dim: 0, opts: [{ t: "闪现越塔也要自己拿人头建立优势", v: 0 }, { t: "试探性追击，不行就撤回去清野/带线", v: 0.33 }, { t: "尽量把人头让给己方最需要经济的核心位", v: 0.67 }, { t: "帮队友卡住敌方支援位置，掩护队友收割", v: 1 }]},
@@ -322,14 +347,13 @@ const questions = [
     { text: "在团战中，你觉得最舒服的输出位置是：", dim: 6, opts: [{ t: "直接切入敌方阵型中心，刀刀到肉", v: 0 }, { t: "在人群边缘穿梭游走，找机会进场", v: 0.33 }, { t: "站在队伍大后方，利用技能疯狂消耗", v: 0.67 }, { t: "躲在视野盲区狙击，决不让敌人摸到我", v: 1 }]},
     { text: "如果遇到落单的脆皮，你的第一反应是：", dim: 6, opts: [{ t: "闪现贴脸，一套连招直接带走", v: 0 }, { t: "利用位移快速拉近距离，平A追击", v: 0.33 }, { t: "保持安全距离，用减速和消耗慢慢折磨", v: 0.67 }, { t: "远距离丢一套技能就跑，绝不给他反打机会", v: 1 }]},
     { text: "你在选择英雄时，最看重哪种攻击手感：", dim: 6, opts: [{ t: "拳拳到肉的近战打击感与拼刀快感", v: 0 }, { t: "灵活穿插、中近距离的拉扯感", v: 0.33 }, { t: "满屏特效、大范围覆盖的法术轰炸感", v: 0.67 }, { t: "箭无虚发、千里之外取敌首级的精准感", v: 1 }]},
-    // D7 (爆发 vs 持续) [新增]
+    // D7 (爆发 vs 持续)
     { text: "团战中你的输出节奏倾向于：", dim: 7, opts: [{ t: "找准时机进场，一套技能全部砸完就立刻撤退", v: 0 }, { t: "利用短CD技能频繁切入和退出，寻找多次斩杀机会", v: 0.33 }, { t: "保持安全距离，持续不断地提供范围火力压制", v: 0.67 }, { t: "只要我不死，就能一直粘着敌人进行无休止的输出", v: 1 }]},
     { text: "面对敌方出了多件防御装的肉坦，你会：", dim: 7, opts: [{ t: "懒得多看他一眼，直接绕过去强切对面的脆皮后排", v: 0 }, { t: "配合队友先集中一波高爆发火力尝试将其秒杀", v: 0.33 }, { t: "利用技能机制和真实伤害，耐心地慢慢将其血条磨平", v: 0.67 }, { t: "出好穿透和吸血装，享受和他持续硬刚站撸的快感", v: 1 }]},
     { text: "你最享受的击杀方式是：", dim: 7, opts: [{ t: "血条瞬间消失术，敌人根本连按闪现的反应时间都没有", v: 0 }, { t: "丝血极限反杀时，那一瞬间打出的恐怖爆发", v: 0.33 }, { t: "一点点压低对面的血线，最后用一个优雅的技能收割", v: 0.67 }, { t: "让敌人在无尽的拉扯、减速和中毒/灼烧中绝望倒下", v: 1 }]}
 ];
 
-// 130位常驻英雄库（补充了第八维度的数据：Stats末尾补充1个能力值，Binary末尾补充0或1）
-// 格式：英雄名|台词|分路|标签|描述|雷达8维|8位理想二进制
+// 130位常驻英雄库
 const rawHeroData = [
     "影|我，即是黑夜。|打野|极致潜行,一击必杀|你是绝对的刺杀机器。没有多余的废话和动作，在阴影中蛰伏，只为那瞬间的致命一击。|9,2,4,6,3,9,8,2|00000000",
     "兰陵王|刀锋所划之地，便是疆土。|打野|隐身刺客,冷酷无情|你是黑暗中让人窒息的死神。最懂得在前期利用信息差建立恐慌。简单的连招足以摧毁敌方心态。|9,2,4,6,6,6,5,2|00000010",
@@ -468,12 +492,12 @@ rawHeroData.forEach(row => {
         tags: parts[3], 
         desc: parts[4], 
         stats: parts[5].split(',').map(Number),
-        bin: parts[6] // 理想的8维0/1标识
+        bin: parts[6] 
     });
 });
 
 let currentQ = 0;
-let scores = [0, 0, 0, 0, 0, 0, 0, 0]; // 8 个维度的得分
+let scores = [0, 0, 0, 0, 0, 0, 0, 0]; 
 let historyStack = [];
 
 function startTest() {
@@ -532,52 +556,52 @@ function prevQ() {
 function showLoading() {
     document.getElementById('page-test').style.display = 'none';
     document.getElementById('page-loading').style.display = 'flex';
-    setTimeout(calcResult, 2200);
+    setTimeout(calcResult, 2500);
 }
 
+// 核心还原：基于你的8维超立方体距离理论计算
 function calcResult() {
-    // 使用 KNN (欧几里得距离思想) 从 130 个英雄中找出潜意识得分距离最近的
-    let bestHero = heroLibrary[0];
-    let maxMatchPercent = 0;
-
     heroLibrary.forEach(h => {
-        let diff = 0;
+        let diffBin = 0;
+        let diffStat = 0;
+        
         for(let i=0; i<8; i++) {
-            // 用户的得分单维度最大为 3 (3个问题全选 1)。理想状态下，英雄偏向 1 则得分为 3，偏向 0 则得分为 0
+            // 1. 宏观距离 (Binary) - 完全回归用户原本逻辑，作为绝对核心
             let idealScore = h.bin[i] === "1" ? 3 : 0;
-            diff += Math.abs(scores[i] - idealScore);
+            diffBin += Math.abs(scores[i] - idealScore);
+            
+            // 2. 微观雷达差距 - 仅作为后续防并列的辅助参数
+            let userStatMapped = 1 + (scores[i] / 3) * 9; 
+            diffStat += Math.abs(userStatMapped - h.stats[i]);
         }
         
-        // 最大总差异是 8个维度 * 每个维度最大差3 = 24
-        let matchPercent = ((24 - diff) / 24) * 100;
+        // 基于超空间距离算出的基础契合度 (满分100%，极值差异24)
+        let basePercent = ((24 - diffBin) / 24) * 100;
         
-        // 增加极微小的随机扰动（解决绝对同分并列时的覆盖问题，带来算命般的“缘分”）
-        matchPercent += Math.random() * 0.05;
-
-        if(matchPercent > maxMatchPercent) {
-            maxMatchPercent = matchPercent;
-            bestHero = h;
-        }
+        // 引入雷达图差值作为极微小的惩罚项（最大不超过 0.1%）。
+        // 它的唯一作用是：当有两个英雄的二进制距离一模一样时，系统能靠它给出稳定、不靠猜的唯一排序。
+        let tieBreaker = (diffStat / 72) * 0.1; 
+        
+        h.currentMatch = basePercent - tieBreaker;
     });
 
-    renderResult(bestHero, scores, maxMatchPercent);
+    // 降序排序
+    heroLibrary.sort((a, b) => b.currentMatch - a.currentMatch);
+
+    const bestHero = heroLibrary[0];
+    const similarHeroes = [heroLibrary[1], heroLibrary[2], heroLibrary[3]];
+
+    renderResult(bestHero, scores, bestHero.currentMatch, similarHeroes);
 }
 
-// 头像加载防崩盘与多格式兼容机制
+// 图片加载防崩与首字母降级
 function loadHeroImage(imgElement, heroName) {
-    // 去除前后空格
     const nameTrimmed = heroName.trim();
-    // 去除内部所有空格作为备选方案（防手滑）
     const nameNoSpace = heroName.replace(/\s+/g, '');
     
-    // 穷举可能的文件后缀名和容易出错的空格情况
     const paths = [
         `images/${nameTrimmed}.png`,
-        `images/${nameTrimmed}.PNG`,
         `images/${nameTrimmed}.jpg`,
-        `images/${nameTrimmed}.JPG`,
-        `images/${nameTrimmed}.jpeg`,
-        `images/${nameTrimmed}.webp`,
         `images/${nameNoSpace}.png`,
         `images/${nameNoSpace}.jpg`
     ];
@@ -586,32 +610,27 @@ function loadHeroImage(imgElement, heroName) {
     imgElement.onerror = function() {
         idx++;
         if (idx < paths.length) {
-            // 依次尝试后续格式
             imgElement.src = paths[idx];
         } else {
-            // 所有格式都找不到时，优雅隐藏画框
-            imgElement.parentElement.style.display = 'none';
-            imgElement.onerror = null; 
+            // 升级：所有图片均找不到时，不隐藏容器，而是显示带首字母的优雅色块
+            const parent = imgElement.parentElement;
+            parent.innerHTML = `<div class="img-fallback">${heroName.charAt(0)}</div>`;
         }
     };
-    
-    // 首次尝试加载
     imgElement.src = paths[0];
 }
 
-function renderResult(res, rawScores, percent) {
+function renderResult(res, rawScores, percent, similarHeroes) {
     document.getElementById('page-loading').style.display = 'none';
     document.getElementById('page-result').style.display = 'block';
 
-    // 动态挂载头像并启用安全加载机制
+    // 渲染主英雄头像
     const avatarBox = document.getElementById('avatar-box');
-    avatarBox.style.display = 'block'; // 恢复显示（重测时用到）
     avatarBox.innerHTML = `<img class="hero-image" alt="${res.name}">`;
     loadHeroImage(avatarBox.querySelector('img'), res.name);
 
-    // 契合度显示
+    // 显示修复后的正常契合度
     document.getElementById('res-match-percent').innerText = `本命契合度 ${(percent).toFixed(1)}%`;
-
     document.getElementById('res-name').innerText = res.name;
     document.getElementById('res-slogan').innerText = `“${res.slogan}”`;
     document.getElementById('res-desc').innerText = res.desc;
@@ -621,9 +640,26 @@ function renderResult(res, rawScores, percent) {
 
     renderSpectrumBars(rawScores);
     setTimeout(() => { drawRadar(res.stats); }, 400);
+
+    // 渲染相似英雄模块
+    const simContainer = document.getElementById('similar-heroes');
+    simContainer.innerHTML = similarHeroes.map(h => `
+        <div class="similar-hero-card">
+            <div class="similar-hero-avatar">
+                <img alt="${h.name}">
+            </div>
+            <div class="sim-name">${h.name}</div>
+            <div class="sim-percent">${h.currentMatch.toFixed(1)}%</div>
+        </div>
+    `).join('');
+
+    // 触发生相似英雄图片加载
+    const simImgs = simContainer.querySelectorAll('img');
+    similarHeroes.forEach((h, index) => {
+        loadHeroImage(simImgs[index], h.name);
+    });
 }
 
-// 渲染全新双极图谱
 function renderSpectrumBars(rawScores) {
     const container = document.getElementById('trait-bars');
     const traitNames = [
@@ -633,10 +669,8 @@ function renderSpectrumBars(rawScores) {
     ];
     let html = '';
     for(let i=0; i<8; i++) {
-        // 计算百分比位置 (5% ~ 95% 防止游标超出边框)
         const percent = Math.max(5, Math.min(95, (rawScores[i] / 3) * 100));
         const isLeft = percent <= 50;
-        
         html += `
         <div class="spectrum-row">
             <div class="spectrum-labels">
@@ -651,7 +685,6 @@ function renderSpectrumBars(rawScores) {
     container.innerHTML = html;
 }
 
-// 绘制八维放大版雷达图
 function drawRadar(stats) {
     const canvas = document.getElementById('radarChart');
     const ctx = canvas.getContext('2d');
@@ -661,11 +694,10 @@ function drawRadar(stats) {
     ctx.scale(dpr, dpr);
 
     const cx = w / 2; const cy = h / 2 + 5;
-    const r = Math.min(w, h) / 2.8; // 半径扩大，撑满画布
+    const r = Math.min(w, h) / 2.8; 
     const sides = 8;
     const labels = ["爆发输出", "生存承伤", "团战拉扯", "发育运营", "控制增益", "灵动游走", "操作门槛", "持续消耗"];
 
-    // 浅色网格底线 (八边形)
     ctx.lineWidth = 1;
     for(let i=1; i<=4; i++) {
         ctx.beginPath();
@@ -680,7 +712,6 @@ function drawRadar(stats) {
         ctx.stroke();
     }
 
-    // 中心连线
     ctx.beginPath();
     for(let j=0; j<sides; j++) {
         const angle = (Math.PI*2/sides)*j - Math.PI/2;
@@ -688,7 +719,6 @@ function drawRadar(stats) {
     }
     ctx.strokeStyle = '#e2e8f0'; ctx.stroke();
 
-    // 浅蓝色水晶填充
     ctx.beginPath();
     for(let j=0; j<sides; j++) {
         const angle = (Math.PI*2/sides)*j - Math.PI/2;
@@ -703,7 +733,6 @@ function drawRadar(stats) {
     ctx.lineWidth = 2.5; 
     ctx.stroke();
     
-    // 节点圆点
     for(let j=0; j<sides; j++) {
         const angle = (Math.PI*2/sides)*j - Math.PI/2;
         let val = Math.max(0.15, stats[j]/10); 
@@ -712,13 +741,12 @@ function drawRadar(stats) {
         ctx.strokeStyle = '#0ea5e9'; ctx.lineWidth = 2.5; ctx.stroke();
     }
 
-    // 文字标签加大
     ctx.fillStyle = '#475569'; ctx.font = '700 14px sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     
     for(let j=0; j<sides; j++) {
         const angle = (Math.PI*2/sides)*j - Math.PI/2;
-        const dist = r + 26; // 标签向外推拉
+        const dist = r + 26; 
         ctx.fillText(labels[j], cx + Math.cos(angle)*dist, cy + Math.sin(angle)*dist);
     }
 }
@@ -912,7 +940,7 @@ function drawRadar(stats) {
 
 <script>
     // ================= 配置区域 =================
-    const MAX_USES = 6;                // 同一台设备限制的次数
+    const MAX_USES = 10;                // 同一台设备限制的次数
     // ==========================================
 
     const pageId = window.location.pathname; // 区分不同页面的缓存
