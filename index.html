@@ -349,7 +349,7 @@ const questions = [
     { text: "你在选择英雄时，最看重哪种攻击手感：", dim: 6, opts: [{ t: "拳拳到肉的近战打击感与拼刀快感", v: 0 }, { t: "灵活穿插、中近距离的拉扯感", v: 0.33 }, { t: "满屏特效、大范围覆盖的法术轰炸感", v: 0.67 }, { t: "箭无虚发、千里之外取敌首级的精准感", v: 1 }]},
     // D7 (爆发 vs 持续)
     { text: "团战中你的输出节奏倾向于：", dim: 7, opts: [{ t: "找准时机进场，一套技能全部砸完就立刻撤退", v: 0 }, { t: "利用短CD技能频繁切入和退出，寻找多次斩杀机会", v: 0.33 }, { t: "保持安全距离，持续不断地提供范围火力压制", v: 0.67 }, { t: "只要我不死，就能一直粘着敌人进行无休止的输出", v: 1 }]},
-    { text: "面对敌方出了多件防御装的肉坦，你会：", dim: 7, opts: [{ t: "懒得多看他一眼，直接绕过去强切对面的脆皮后排", v: 0 }, { t: "配合队友先集中一波高爆发火力尝试将其秒杀", v: 0.33 }, { t: "利用技能机制和真实伤害，耐心地慢慢将其血条磨平", v: 0.67 }, { t: "出好穿透和吸血装，享受和他持续硬刚站撸的快感", v: 1 }]},
+    { text: "面对敌方出了多件防御装的肉坦，你会：", dim: 7, opts: [{ t: "懒得多看一眼，直接绕过去强切对面的脆皮后排", v: 0 }, { t: "配合队友先集中一波高爆发火力尝试将其秒杀", v: 0.33 }, { t: "利用技能机制和真实伤害，耐心地慢慢将其血条磨平", v: 0.67 }, { t: "出好穿透和吸血装，享受和他持续硬刚站撸的快感", v: 1 }]},
     { text: "你最享受的击杀方式是：", dim: 7, opts: [{ t: "血条瞬间消失术，敌人根本连按闪现的反应时间都没有", v: 0 }, { t: "丝血极限反杀时，那一瞬间打出的恐怖爆发", v: 0.33 }, { t: "一点点压低对面的血线，最后用一个优雅的技能收割", v: 0.67 }, { t: "让敌人在无尽的拉扯、减速和中毒/灼烧中绝望倒下", v: 1 }]}
 ];
 
@@ -594,29 +594,48 @@ function calcResult() {
     renderResult(bestHero, scores, bestHero.currentMatch, similarHeroes);
 }
 
-// 图片加载防崩与首字母降级
+// 图片加载防崩与首字母降级 (超级鲁棒版)
 function loadHeroImage(imgElement, heroName) {
     const nameTrimmed = heroName.trim();
     const nameNoSpace = heroName.replace(/\s+/g, '');
     
-    const paths = [
-        `images/${nameTrimmed}.png`,
-        `images/${nameTrimmed}.jpg`,
-        `images/${nameNoSpace}.png`,
-        `images/${nameNoSpace}.jpg`
-    ];
+    // 针对特殊英雄处理括号：如 "元流之子(法师)" -> "元流之子法师" 以及 "元流之子"
+    const nameNoBrackets = heroName.replace(/[()（）]/g, '');
+    const nameBaseOnly = heroName.split(/[()（）]/)[0];
+
+    // 穷举所有可能的名字格式（去重）
+    const names = Array.from(new Set([nameTrimmed, nameNoSpace, nameNoBrackets, nameBaseOnly]));
+    
+    // 穷举所有可能的常见后缀名（涵盖服务器上的大小写差异）
+    const exts = ['.png', '.jpg', '.jpeg', '.webp', '.PNG', '.JPG', '.JPEG'];
+
+    const paths = [];
+    names.forEach(n => {
+        exts.forEach(e => {
+            paths.push(`images/${n}${e}`);
+        });
+    });
     
     let idx = 0;
+    
+    // 清理可能存在的旧报错回调，防止在连续推演时出问题
     imgElement.onerror = function() {
         idx++;
         if (idx < paths.length) {
             imgElement.src = paths[idx];
         } else {
-            // 升级：所有图片均找不到时，不隐藏容器，而是显示带首字母的优雅色块
+            // 所有穷举的路径都尝试失败时，优雅地降级为首字母框
             const parent = imgElement.parentElement;
-            parent.innerHTML = `<div class="img-fallback">${heroName.charAt(0)}</div>`;
+            
+            // 确保不会重复添加 fallback 节点
+            if(!parent.querySelector('.img-fallback')) {
+                parent.innerHTML = `<div class="img-fallback">${nameTrimmed.charAt(0)}</div>`;
+            }
+            imgElement.onerror = null; 
         }
     };
+    
+    // 首次尝试
     imgElement.src = paths[0];
 }
 
@@ -751,6 +770,7 @@ function drawRadar(stats) {
     }
 }
 </script>
+
 <!-- 
   =======================================================
   🔒 网页防伪提示锁 (米大师定制版) - 移动端完美适配版
